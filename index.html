@@ -899,7 +899,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       box.appendChild(e);
     }
   }
-  function renderAll(){ renderHeader(); renderMembers(); syncButtons(); }
+  function renderAll(){ renderHeader(); renderMembers(); updateHideBtn(); }
   function updateHostStatus(){
     if(!active||!stream||liveIncoming()>0) return;
     var n=nMembers(), extra=relayUsed>0 ? " · via TURN: "+fmtBytes(relayUsed) : "";
