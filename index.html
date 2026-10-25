@@ -16,8 +16,13 @@
 <meta property="og:title" content="Compartilhe sua tela">
 <meta property="og:description" content="Mostre sua tela ao vivo para qualquer pessoa, direto no navegador. Sem cadastro e sem instalar nada.">
 <meta property="og:url" content="https://compartilhar-tela.github.io/">
+<meta property="og:image" content="https://compartilhar-tela.github.io/preview.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://compartilhar-tela.github.io/preview.png">
 <meta name="twitter:title" content="Compartilhe sua tela">
 <meta name="twitter:description" content="Mostre sua tela ao vivo para qualquer pessoa, direto no navegador. Sem cadastro e sem instalar nada.">
 
@@ -391,21 +396,18 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   var quota=loadQuota();
   function quotaFrac(){ return quota.b/(quotaGB()*1e9); }
   function renderQuota(){
-    var pct=Math.min(100,Math.round(quotaFrac()*100));
-    var fr=quotaFrac(), w=document.getElementById("quotaWarn");
-    if(!w) return;
-    if(fr<0.7){ w.className="warn hidden"; w.textContent=""; return; }
-    var usado=fmtBytes(quota.b)+" de "+quotaGB()+" GB";
-    if(fr>=1){
-      w.className="warn l3";
-      w.textContent="⛔ A cota do TURN acabou (estimativa: "+usado+"). Novas sessões só funcionam com conexão direta, e quem estiver em rede restrita, como dados móveis, pode não conseguir ver a tela.";
-    }else if(fr>=0.9){
-      w.className="warn l2";
-      w.textContent="⚠ Cota do TURN quase no fim: "+pct+"% usada ("+usado+"). A conexão pelo servidor pode ficar indisponível quando a cota acabar.";
-    }else{
-      w.className="warn l1";
-      w.textContent="⚠ Atenção: "+pct+"% da cota do TURN já foi usada neste mês ("+usado+"). A qualidade não será reduzida automaticamente por este aviso.";
-    }
+    var w=document.getElementById("quotaWarn"); if(!w) return;
+    var notes=[], lvl=0, alive=0, gone=false;
+    providers().forEach(function(p){
+      var fr=usedFrac(p.id), q=qInfo(p.id), usado=fmtBytes(fr*q.gb*1e9)+" de "+q.gb+" GB";
+      if(fr<1) alive++;
+      if(fr>=1){ gone=true; lvl=Math.max(lvl,2); notes.push("⛔ "+p.name+": a cota acabou (estimativa: "+usado+")."); }
+      else if(fr>=0.8){ lvl=Math.max(lvl,fr>=0.9?2:1); notes.push("⚠ "+p.name+": "+Math.round(fr*100)+"% da cota já foi usada neste mês ("+usado+")."); }
+    });
+    if(!notes.length){ w.className="warn hidden"; w.textContent=""; return; }
+    if(!alive){ lvl=3; notes.push("Sem servidor TURN disponível: novas sessões só funcionam com conexão direta, e quem estiver em rede restrita, como dados móveis, pode não conseguir ver a tela."); }
+    else if(gone) notes.push("Em uso agora: "+curProv().name+".");
+    w.className="warn l"+lvl; w.style.whiteSpace="pre-line"; w.textContent=notes.join("\n");
   }
   function addRelay(delta){
     if(delta<=0) return;
@@ -579,12 +581,14 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   async function hostStats(){
     if(!active) return;
+    var worstRtt=0, worstLoss=0;
     for(var k=0;k<calls.length;k++){
       var c=calls[k], pc=c.peerConnection; if(!pc) continue;
       try{
         var rep=await pc.getStats(), bytes=0, pair=null, loc={}, rem={};
         rep.forEach(function(r){
           if(r.type==="outbound-rtp") bytes+=r.bytesSent||0;
+          if(r.type==="remote-inbound-rtp"&&r.kind==="video") worstLoss=Math.max(worstLoss,r.fractionLost||0);
           if(r.type==="local-candidate") loc[r.id]=r;
           if(r.type==="remote-candidate") rem[r.id]=r;
           if(r.type==="candidate-pair"&&r.state==="succeeded"&&(r.nominated||r.selected)) pair=r;
@@ -594,6 +598,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           var a=loc[pair.localCandidateId], b=rem[pair.remoteCandidateId];
           relay=!!((a&&a.candidateType==="relay")||(b&&b.candidateType==="relay"));
           c._known=true;
+          if(pair.currentRoundTripTime) worstRtt=Math.max(worstRtt,Math.round(pair.currentRoundTripTime*1000));
         }
         var delta=Math.max(0,bytes-(c._last||0)); c._last=bytes;
         totalUsed+=delta; if(relay){ relayUsed+=delta; addRelay(delta); }
@@ -603,7 +608,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var me=tiles.me, tr=stream&&stream.getVideoTracks()[0];
     if(me&&tr){
       var ss=tr.getSettings();
-      if(ss.width){ me.stat.textContent="Ao vivo · "+ss.width+"×"+ss.height+" · "+Math.round(ss.frameRate||0)+" fps"; me.stat.classList.add("on"); }
+      if(ss.width){ me.stat.textContent="Ao vivo · "+ss.width+"×"+ss.height+" · "+Math.round(ss.frameRate||0)+" fps"+(worstRtt?" · "+worstRtt+" ms":"")+(calls.length?" · perda "+(worstLoss*100).toFixed(1).replace(".",",")+"%":""); me.stat.classList.add("on"); }
     }
     syncTopStat();
     relayGuard();
@@ -1301,7 +1306,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           }
           if(first){ lastDiag=pc.iceConnectionState+(kind?", "+kind:""); first=false; }
           if(info&&info.frameWidth){
-            var txt=info.frameWidth+"×"+info.frameHeight+" · "+Math.round(info.framesPerSecond||0)+" fps"+(kind?" · "+kind:"");
+            var lost=info.packetsLost||0, got=info.packetsReceived||0, dl=Math.max(0,lost-(call._pl||0)), dg=Math.max(0,got-(call._pr||0));
+            call._pl=lost; call._pr=got;
+            var rtt=pair&&pair.currentRoundTripTime?Math.round(pair.currentRoundTripTime*1000):0;
+            var txt=info.frameWidth+"×"+info.frameHeight+" · "+Math.round(info.framesPerSecond||0)+" fps"+(kind?" · "+kind:"")+(rtt?" · "+rtt+" ms":"")+(dg+dl>0?" · perda "+(dl/(dg+dl)*100).toFixed(1).replace(".",",")+"%":"");
             lives.push(txt);
             var tl=tiles[ids[i]]; if(tl){ tl.stat.textContent="Ao vivo · "+txt; tl.stat.classList.add("on"); }
           }
