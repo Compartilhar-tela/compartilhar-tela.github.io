@@ -1045,6 +1045,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       history.replaceState(null,"",baseUrl()+"#"+code);
       clearInterval(hostStatsTimer); hostStatsTimer=setInterval(hostStats,3000);
       migrating=false;
+      $("codeOut").value = code;
+      $("btnCopy").disabled = false;
+      $("btnCopyCode").disabled = false;
+      $("btnCopyLink").classList.remove("hidden");
       if(stream){ var t=getTile("me","Você"); t.video.srcObject=stream; t.video.muted=true; }
       else{
         setStatus("Na sala",false);
