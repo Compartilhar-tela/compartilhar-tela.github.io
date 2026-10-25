@@ -2,13 +2,13 @@
 // Variáveis necessárias (Settings > Variables and Secrets):
 //   TURN_KEY_ID     (texto)   -> "Key ID" da sua TURN key
 //   TURN_API_TOKEN  (secret)  -> "API Token" da sua TURN key
-//   ALLOWED_ORIGIN  (texto, opcional) -> padrão: https://compartilhar-tela.github.io (vários endereços separados por vírgula)
+//   ALLOWED_ORIGIN  (texto, opcional) -> padrão: https://telinhaa.pages.dev (vários endereços separados por vírgula)
 
 // Cloudflare Worker: credenciais TURN e pré-visualização dinâmica com código da sala
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const list = (env.ALLOWED_ORIGIN || "https://compartilhar-tela.github.io").split(",").map(x => x.trim());
+    const list = (env.ALLOWED_ORIGIN || "https://telinhaa.pages.dev").split(",").map(x => x.trim());
     const origin = request.headers.get("Origin");
     const allowed = list.includes(origin) ? origin : list[0];
     const cors = {
@@ -30,13 +30,13 @@ export default {
         <title>Compartilhe sua tela - Sala ${code}</title>
         <meta property="og:title" content="Compartilhe sua tela - Sala ${code}">
         <meta property="og:description" content="Clique para entrar na sala ${code} e assistir à transmissão ao vivo sem instalar nada.">
-        <meta property="og:image" content="https://compartilhar-tela.github.io/preview.png">
+        <meta property="og:image" content="https://telinhaa.pages.dev/preview.png">
         <meta property="og:image:type" content="image/png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="https://compartilhar-tela.github.io/preview.png">
-        <meta http-equiv="refresh" content="0;url=https://compartilhar-tela.github.io/#${code}">
+        <meta name="twitter:image" content="https://telinhaa.pages.dev/preview.png">
+        <meta http-equiv="refresh" content="0;url=https://telinhaa.pages.dev/#${code}">
       </head>
       <body>Redirecionando para a sala ${code}...</body>
       </html>`;
