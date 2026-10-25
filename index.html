@@ -86,6 +86,8 @@ button:hover:not(:disabled){filter:brightness(1.12)}
 .tiles.n1 .tag{display:none}
 .tile .stat{position:absolute;left:10px;top:10px;max-width:calc(100% - 56px);padding:4px 8px;border-radius:6px;background:rgba(5,6,15,.78);font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:5;pointer-events:none;display:none}
 .tile .stat.on{display:block}
+.tile .reco{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,6,15,.55);font-weight:700;font-size:1.1rem;z-index:4;pointer-events:none}
+.tile .reco.on{display:flex}
 .tiles.n1 .tile .stat{display:none!important}
 .stage:fullscreen .tiles.n1 .tile .stat.on{display:block!important}
 .stat-top{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--ink)}
@@ -176,6 +178,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
         </div>
       </div>
 
+      <div class="lbl" style="margin-top:8px">Atalhos: M som · F tela cheia · P pausar · H ocultar minha tela</div>
       <h1 id="stageTitle">Compartilhe sua tela</h1>
       <div class="hostrow">
         <span class="avatar">V</span>
@@ -504,7 +507,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function describeCapture(){
     try{
       var st=stream.getVideoTracks()[0].getSettings();
-      return st.width+"×"+st.height+" a "+Math.round(st.frameRate||0)+" fps";
+      return st.width+"×"+st.height+" a "+Math.round(st.frameRate||0)+" fps"+(stream.getAudioTracks().length?", com áudio":", sem áudio (para enviar o som, marque \"Compartilhar áudio\" ao escolher a tela)");
     }catch(e){ return ""; }
   }
   function tuneCall(c){
@@ -551,8 +554,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   document.addEventListener("visibilitychange",function(){ if(active&&document.visibilityState==="visible") keepAwake(true); });
   
   function keepSignal(pr){
+    pr.on("open", function(){ if(pr._lost){ pr._lost=false; setMsg("Reconectado ao servidor da sala."); } });
     pr.on("disconnected", function(){
       if (!active || peer !== pr || pr.destroyed) return;
+      pr._lost=true; setMsg("Sem conexão com o servidor da sala. Reconectando…",true);
       (function silentRetry(){
         if(!active || peer !== pr || pr.destroyed || !pr.disconnected) return;
         try { pr.reconnect(); } catch(e){}
@@ -608,7 +613,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var me=tiles.me, tr=stream&&stream.getVideoTracks()[0];
     if(me&&tr){
       var ss=tr.getSettings();
-      if(ss.width){ me.stat.textContent="Ao vivo · "+ss.width+"×"+ss.height+" · "+Math.round(ss.frameRate||0)+" fps"+(worstRtt?" · "+worstRtt+" ms":"")+(calls.length?" · perda "+(worstLoss*100).toFixed(1).replace(".",",")+"%":""); me.stat.classList.add("on"); }
+      if(ss.width){ me.stat.textContent="Ao vivo · "+ss.width+"×"+ss.height+" · "+Math.round(ss.frameRate||0)+" fps"+(stream.getAudioTracks().length?" · com áudio":" · sem áudio")+(worstRtt?" · "+worstRtt+" ms":"")+(calls.length?" · perda "+(worstLoss*100).toFixed(1).replace(".",",")+"%":""); me.stat.classList.add("on"); }
     }
     syncTopStat();
     relayGuard();
@@ -803,6 +808,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var stat = document.createElement("div");
     stat.className = "stat";
     el.appendChild(stat);
+    var reco = document.createElement("div");
+    reco.className = "reco";
+    reco.textContent = "Reconectando…";
+    el.appendChild(reco);
     
     if (key === "me") {
       el.dataset.local = "true";
@@ -821,7 +830,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     }
     
     $("tiles").appendChild(el);
-    tiles[key] = { el: el, video: v, tag: tag, tagText: tagText, netDot: netDot, stat: stat };
+    tiles[key] = { el: el, video: v, tag: tag, tagText: tagText, netDot: netDot, stat: stat, reco: reco };
     layout();
     return tiles[key];
   }
@@ -877,7 +886,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       var out=calls.filter(function(x){ return x.peer===id; })[0], inc=incoming[id];
       var known=(out&&out._known)||(inc&&inc._known), relay=(out&&out._relay)||(inc&&inc._relay);
       var mc=members[id].conn;
-      if(!known && mc && mc.open && !out && !inc){ r.textContent="na sala"; r.className+=" mut"; }
+      if((out&&out._down)||(inc&&inc._down)){ r.textContent="reconectando…"; r.className+=" amb"; }
+      else if(!known && mc && mc.open && !out && !inc){ r.textContent="na sala"; r.className+=" mut"; }
       else if(!known){ r.textContent="conectando…"; r.className+=" mut"; updateTileStatus(id, "bad"); }
       else if(relay){ r.textContent="via servidor"+(out&&out._relay&&out._kbps?" · "+String(out._kbps/1000).replace(".",",")+" Mbps":""); r.className+=" amb"; updateTileStatus(id, "relay"); }
       else { r.textContent="conexão direta"; r.className+=" grn"; updateTileStatus(id, "direct"); }
@@ -1017,6 +1027,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var pc0=c.peerConnection, rt=null;
     if(pc0) pc0.addEventListener("iceconnectionstatechange",function(){
       var st=pc0.iceConnectionState;
+      c._down=(st==="disconnected"||st==="failed"); renderMembers();
       if(st==="connected"||st==="completed"){ clearTimeout(rt); redial[id]=0; tuneCall(c); }
       else if(st==="disconnected"||st==="failed"){
         clearTimeout(rt);
@@ -1271,9 +1282,11 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var id=call.peer, pcv=call.peerConnection, vt=null;
     incoming[id]=call;
     if(pcv) pcv.addEventListener("iceconnectionstatechange",function(){
-      var st=pcv.iceConnectionState;
+      var st=pcv.iceConnectionState, down=(st==="disconnected"||st==="failed");
+      call._down=down; if(tiles[id]) tiles[id].reco.classList.toggle("on",down);
+      renderMembers();
       if(st==="connected"||st==="completed") clearTimeout(vt);
-      else if(st==="disconnected"||st==="failed"){
+      else if(down){
         clearTimeout(vt);
         vt=setTimeout(function(){
           if(incoming[id]===call && !/^(connected|completed)$/.test(pcv.iceConnectionState)) sendTo(id,"retry");
@@ -1345,7 +1358,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
             var lost=info.packetsLost||0, got=info.packetsReceived||0, dl=Math.max(0,lost-(call._pl||0)), dg=Math.max(0,got-(call._pr||0));
             call._pl=lost; call._pr=got;
             var rtt=pair&&pair.currentRoundTripTime?Math.round(pair.currentRoundTripTime*1000):0;
-            var txt=info.frameWidth+"×"+info.frameHeight+" · "+Math.round(info.framesPerSecond||0)+" fps"+(kind?" · "+kind:"")+(rtt?" · "+rtt+" ms":"")+(dg+dl>0?" · perda "+(dl/(dg+dl)*100).toFixed(1).replace(".",",")+"%":"");
+            var tv=tiles[ids[i]]&&tiles[ids[i]].video, hasA=tv&&tv.srcObject&&tv.srcObject.getAudioTracks().length;
+            var txt=info.frameWidth+"×"+info.frameHeight+" · "+Math.round(info.framesPerSecond||0)+" fps"+(hasA?" · com áudio":" · sem áudio")+(kind?" · "+kind:"")+(rtt?" · "+rtt+" ms":"")+(dg+dl>0?" · perda "+(dl/(dg+dl)*100).toFixed(1).replace(".",",")+"%":"");
             lives.push(txt);
             var tl=tiles[ids[i]]; if(tl){ tl.stat.textContent="Ao vivo · "+txt; tl.stat.classList.add("on"); }
           }
@@ -1430,6 +1444,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     document.addEventListener(ev,function(){ lastAct=Date.now(); },{passive:true});
   });
 
+  $("btnMute").title="Som (M)"; $("btnFull").title="Tela cheia (F)"; $("btnPlay").title="Pausar / continuar (P)";
   document.addEventListener("keydown", function(e) {
     if (["INPUT", "TEXTAREA", "SELECT"].indexOf(document.activeElement.tagName) !== -1) return;
     var k = e.key.toLowerCase();

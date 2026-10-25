@@ -2,13 +2,15 @@
 // Variáveis necessárias (Settings > Variables and Secrets):
 //   TURN_KEY_ID     (texto)   -> "Key ID" da sua TURN key
 //   TURN_API_TOKEN  (secret)  -> "API Token" da sua TURN key
-//   ALLOWED_ORIGIN  (texto, opcional) -> padrão: https://compartilhar-tela.github.io
+//   ALLOWED_ORIGIN  (texto, opcional) -> padrão: https://compartilhar-tela.github.io (vários endereços separados por vírgula)
 
 // Cloudflare Worker: credenciais TURN e pré-visualização dinâmica com código da sala
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const allowed = env.ALLOWED_ORIGIN || "https://compartilhar-tela.github.io";
+    const list = (env.ALLOWED_ORIGIN || "https://compartilhar-tela.github.io").split(",").map(x => x.trim());
+    const origin = request.headers.get("Origin");
+    const allowed = list.includes(origin) ? origin : list[0];
     const cors = {
       "Access-Control-Allow-Origin": allowed,
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
