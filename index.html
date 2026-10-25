@@ -899,7 +899,43 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       box.appendChild(e);
     }
   }
-  function renderAll(){ renderHeader(); renderMembers(); updateHideBtn(); }
+  function syncButtons(){
+    var sharing=!!stream;
+
+    var btnStart = $("btnStart");
+    if (sharing) {
+      btnStart.textContent = "Encerrar transmissão";
+      btnStart.style.background = "#2a1722";
+      btnStart.style.color = "#ffb3bd";
+      btnStart.disabled = false;
+    } else {
+      btnStart.textContent = "+ Compartilhar tela";
+      btnStart.style.background = "var(--accent)";
+      btnStart.style.color = "#fff";
+      btnStart.disabled = starting;
+    }
+
+    var btnStart2 = $("btnStart2");
+    if (sharing) {
+      btnStart2.textContent = "Encerrar transmissão";
+      btnStart2.className = "pillbtn danger";
+      btnStart2.disabled = false;
+    } else {
+      btnStart2.textContent = "Transmitir";
+      btnStart2.className = "pillbtn primary";
+      btnStart2.disabled = starting;
+    }
+
+    $("btnSwitch").disabled = !sharing;
+    updateHideBtn();
+    $("btnStop").disabled = !active;
+    $("btnCopy").disabled = $("btnCopyCode").disabled = !roomCode;
+    $("codeOut").value = roomCode;
+    $("btnCopyLink").classList.toggle("hidden", !roomCode);
+    $("btnJoin").disabled = joining;
+  }
+
+  function renderAll(){ renderHeader(); renderMembers(); syncButtons(); }
   function updateHostStatus(){
     if(!active||!stream||liveIncoming()>0) return;
     var n=nMembers(), extra=relayUsed>0 ? " · via TURN: "+fmtBytes(relayUsed) : "";
@@ -936,7 +972,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){
       return setMsg("Este navegador não permite compartilhar a tela. No celular isso geralmente não funciona; use um computador.",true);
     }
-    starting=true; renderAll();
+    starting=true; syncButtons();
     var st;
     try{ st=await navigator.mediaDevices.getDisplayMedia(capConstraints()); }
     catch(e){ starting=false; syncButtons(); return setMsg("Compartilhamento cancelado. Escolha uma tela ou janela para continuar.",true); }
@@ -1045,10 +1081,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       history.replaceState(null,"",baseUrl()+"#"+code);
       clearInterval(hostStatsTimer); hostStatsTimer=setInterval(hostStats,3000);
       migrating=false;
-      $("codeOut").value = code;
-      $("btnCopy").disabled = false;
-      $("btnCopyCode").disabled = false;
-      $("btnCopyLink").classList.remove("hidden");
       if(stream){ var t=getTile("me","Você"); t.video.srcObject=stream; t.video.muted=true; }
       else{
         setStatus("Na sala",false);
