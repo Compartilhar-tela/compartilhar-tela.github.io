@@ -936,7 +936,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){
       return setMsg("Este navegador não permite compartilhar a tela. No celular isso geralmente não funciona; use um computador.",true);
     }
-    starting=true; syncButtons();
+    starting=true; renderAll();
     var st;
     try{ st=await navigator.mediaDevices.getDisplayMedia(capConstraints()); }
     catch(e){ starting=false; syncButtons(); return setMsg("Compartilhamento cancelado. Escolha uma tela ou janela para continuar.",true); }
