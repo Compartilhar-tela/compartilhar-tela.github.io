@@ -2,15 +2,25 @@
 // Variáveis necessárias (Settings > Variables and Secrets):
 //   TURN_KEY_ID     (texto)   -> "Key ID" da sua TURN key
 //   TURN_API_TOKEN  (secret)  -> "API Token" da sua TURN key
-//   ALLOWED_ORIGIN  (texto, opcional) -> padrão: https://telinhaa.pages.dev (vários endereços separados por vírgula)
+//   ALLOWED_ORIGIN  (texto, opcional) -> padrão: https://telinhaa.pages.dev
+//       Vários endereços separados por vírgula. Aceita curinga para testes de branch, por exemplo:
+//       https://telinhaa.pages.dev,https://*.telinhaa.pages.dev
+//       Endereços que NÃO estão na lista recebem erro 403 e nenhuma credencial.
 
 // Cloudflare Worker: credenciais TURN e pré-visualização dinâmica com código da sala
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const list = (env.ALLOWED_ORIGIN || "https://telinhaa.pages.dev").split(",").map(x => x.trim());
+    const list = (env.ALLOWED_ORIGIN || "https://telinhaa.pages.dev").split(",").map(x => x.trim()).filter(Boolean);
     const origin = request.headers.get("Origin");
-    const allowed = list.includes(origin) ? origin : list[0];
+    const isAllowed = (o) => !!o && list.some(p => {
+      if (p === o) return true;
+      if (p.indexOf("*") < 0) return false;
+      const re = new RegExp("^" + p.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[a-z0-9-]+") + "$");
+      return re.test(o);
+    });
+    const originOk = isAllowed(origin);
+    const allowed = originOk ? origin : list[0];
     const cors = {
       "Access-Control-Allow-Origin": allowed,
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -43,7 +53,10 @@ export default {
       return new Response(html, { headers: { "Content-Type": "text/html;charset=UTF-8", ...cors } });
     }
 
-    // 2. Fornecer credenciais ICE/TURN para o WebRTC
+    // 2. Fornecer credenciais ICE/TURN para o WebRTC (só para endereços permitidos)
+    if (!originOk) {
+      return new Response(JSON.stringify({ error: "Origem não permitida" }), { status: 403, headers: { ...cors, "Content-Type": "application/json" } });
+    }
     if (!env.TURN_KEY_ID || !env.TURN_API_TOKEN) {
       return new Response(JSON.stringify({ error: "Worker sem credenciais" }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
     }
