@@ -205,8 +205,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
         <label class="chip"><select id="selMode" aria-label="Modo"><option value="auto">Modo Automático</option><option value="game" selected>Modo Jogo</option><option value="text">Modo Texto</option></select></label>
         <label class="chip"><span>Encoder (Hardware)</span><select id="selHardware"><option value="auto">Automático</option><option value="gpu" selected>Placa de Vídeo (GPU / NVENC)</option><option value="cpu">Processador (CPU)</option></select></label>
         <label class="chip"><span>Limite via servidor</span><select id="selRelay"><option value="2000">2 Mbps</option><option value="3000">3 Mbps</option><option value="4000" selected>4 Mbps</option><option value="6000">6 Mbps</option><option value="10000">10 Mbps</option><option value="0">Sem limite</option></select></label>
-        <label class="chip"><span>Áudio</span><select id="selAudio"><option value="system">Do sistema (tudo)</option><option value="none">Sem áudio</option></select></label>
-        <button class="linkbtn" id="btnAudioList" style="margin:0 0 0 4px">Procurar entradas de áudio (cabo virtual)</button>
+        <label class="chip"><span>Áudio</span><select id="selAudio"><option value="system">Do sistema (tudo)</option><option value="window" selected>Só da janela</option><option value="none">Sem áudio</option></select></label>
       </div>
     </section>
 
@@ -505,10 +504,13 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   function capConstraints(){
     var q=qual();
-    return {
+    var ch=audioChoice(), win=(ch==="window");
+    var c={
       video: { width: { ideal: q.w }, height: { ideal: q.h }, frameRate: { ideal: q.f, max: q.f } },
-      audio: audioChoice()==="system"
+      audio: (ch==="system"||win)
     };
+    if(win){ c.video.displaySurface="window"; c.windowAudio="window"; }
+    return c;
   }
   function audioChoice(){ return $("selAudio").value; }
   function devId(){ var v=audioChoice(); return v.indexOf("dev:")===0 ? v.slice(4) : null; }
@@ -543,7 +545,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function describeCapture(){
     try{
       var st=stream.getVideoTracks()[0].getSettings();
-      return st.width+"×"+st.height+" a "+Math.round(st.frameRate||0)+" fps"+(stream.getAudioTracks().length?", com áudio":", sem áudio (para enviar o som, marque \"Compartilhar áudio\" ao escolher a tela)");
+      return st.width+"×"+st.height+" a "+Math.round(st.frameRate||0)+" fps"+(stream.getAudioTracks().length?", com áudio":(audioChoice()==="window"?", sem áudio (a janela não forneceu áudio; isso funciona no Chrome para Windows, escolhendo uma janela e não a tela inteira)":", sem áudio (para enviar o som, marque \"Compartilhar áudio\" ao escolher a tela)"));
     }catch(e){ return ""; }
   }
   function tuneCall(c){
@@ -1006,7 +1008,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.27-a", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.27-d", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
@@ -1047,6 +1049,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     }
     starting=true; syncButtons();
     var st;
+    if(!cam && audioChoice()==="window") setMsg("No seletor, escolha a janela do jogo (não a tela inteira). O áudio enviado será só o dessa janela.");
     try{ st=await (cam ? navigator.mediaDevices.getUserMedia(capConstraintsCam()) : navigator.mediaDevices.getDisplayMedia(capConstraints())); }
     catch(e){ starting=false; syncButtons(); return setMsg(cam ? "Não foi possível usar a câmera. Permita o acesso à câmera e ao microfone e tente de novo." : "Compartilhamento cancelado. Escolha uma tela ou janela para continuar.",true); }
     camMode=cam;
@@ -1111,6 +1114,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(!active||!stream) return;
     var ns;
     if(camMode) camFacing=(camFacing==="user"?"environment":"user");
+    else if(audioChoice()==="window") setMsg("No seletor, escolha a janela do jogo (não a tela inteira). O áudio enviado será só o dessa janela.");
     try{ ns=await (camMode ? navigator.mediaDevices.getUserMedia(capConstraintsCam()) : navigator.mediaDevices.getDisplayMedia(capConstraints())); }
     catch(e){
       if(camMode) camFacing=(camFacing==="user"?"environment":"user");
@@ -1584,7 +1588,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       }
     }catch(e){}
     sel.onchange=function(){ try{ localStorage.setItem("telaja_audio",JSON.stringify({v:sel.value,l:sel.options[sel.selectedIndex].textContent})); }catch(e){} };
-    $("btnAudioList").onclick=listAudioInputs;
   })();
   $("btnTurn").onclick=function(){ refreshCf(true).then(function(){ pickAt=0; return ensureTurn(); }).then(testTurn); };
   refreshCf().then(ensureTurn).then(autoTest);
