@@ -13,58 +13,6 @@ if(location.hostname==="compartilhar-tela.github.io"){
   document.getElementById("novo").href="https://telinhaa.pages.dev/"+location.hash.replace(/[^#A-Za-z0-9]/g,"");
 }
 </script>
-<script>
-(function(){
-  var VER="v26.10.26-1"; window.TELAJA_VER=VER;
-  var logs=[], t0=Date.now();
-  function add(m){ logs.push(((Date.now()-t0)/1000).toFixed(1)+"s "+m); if(logs.length>300) logs.shift(); if(window.__dbgRender) window.__dbgRender(); }
-  window.__dbg=add;
-  var on=false, q=location.search;
-  try{
-    if(/[?&]debug=(0|false)(&|$)/.test(q)) sessionStorage.removeItem("telaja_debug");
-    else if(/[?&]debug(=|&|$)/.test(q)) sessionStorage.setItem("telaja_debug","1");
-    on=sessionStorage.getItem("telaja_debug")==="1";
-  }catch(e){ on=/[?&]debug(=|&|$)/.test(q) && !/[?&]debug=(0|false)(&|$)/.test(q); }
-  window.addEventListener("error",function(e){
-    var t=e.target;
-    if(t && t!==window && (t.src||t.href)) add("FALHA AO CARREGAR: "+(t.src||t.href));
-    else add("ERRO JS: "+e.message+" ("+String(e.filename||"").split("/").pop()+":"+e.lineno+":"+e.colno+")");
-  },true);
-  window.addEventListener("unhandledrejection",function(e){ var r=e.reason; add("PROMESSA REJEITADA: "+((r&&(r.stack||r.message))||r)); });
-  ["error","warn"].forEach(function(k){
-    var o=console[k]; if(!o) return;
-    console[k]=function(){
-      try{ add("console."+k+": "+Array.prototype.map.call(arguments,function(a){ return a&&a.message?a.message:String(a); }).join(" ")); }catch(e){}
-      return o.apply(console,arguments);
-    };
-  });
-  if(!on) return;
-  document.addEventListener("DOMContentLoaded",function(){
-    var btn=document.createElement("button"), box=document.createElement("div"), bar=document.createElement("div"), pre=document.createElement("pre");
-    btn.textContent="🐞"; btn.setAttribute("aria-label","Painel de erros");
-    btn.style.cssText="position:fixed;left:8px;bottom:8px;z-index:99999;width:40px;height:40px;border-radius:50%;border:1px solid #6d5df0;background:#12162b;color:#fff;font-size:18px;cursor:pointer;opacity:.85";
-    box.style.cssText="position:fixed;left:8px;right:8px;bottom:56px;height:55vh;z-index:99999;background:rgba(8,10,24,.97);color:#cfeedd;border:1px solid #6d5df0;border-radius:10px;display:none;flex-direction:column;font:11px/1.4 ui-monospace,Menlo,Consolas,monospace";
-    bar.style.cssText="display:flex;gap:8px;padding:8px;border-bottom:1px solid #272c52;flex-wrap:wrap";
-    pre.style.cssText="margin:0;padding:8px;overflow:auto;flex:1;white-space:pre-wrap;word-break:break-word";
-    function mk(t,fn){ var b=document.createElement("button"); b.textContent=t; b.style.cssText="padding:6px 12px;border-radius:8px;border:1px solid #6d5df0;background:#1b2040;color:#fff;cursor:pointer"; b.onclick=fn; bar.appendChild(b); }
-    function text(){ return "Versão: "+VER+"\nNavegador: "+navigator.userAgent+"\nOnline: "+navigator.onLine+"\nTela: "+innerWidth+"x"+innerHeight+"\nEndereço: "+location.origin+location.pathname+"\n\n"+(logs.join("\n")||"(nenhum registro ainda)"); }
-    mk("Copiar",function(){
-      var t=text(), me=this;
-      function ok(){ me.textContent="Copiado!"; setTimeout(function(){ me.textContent="Copiar"; },1500); }
-      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok,ok);
-      else{ var a=document.createElement("textarea"); a.value=t; document.body.appendChild(a); a.select(); try{document.execCommand("copy")}catch(e){} a.remove(); ok(); }
-    });
-    mk("Limpar",function(){ logs.length=0; render(); });
-    mk("Fechar",function(){ box.style.display="none"; });
-    mk("Desativar",function(){ try{sessionStorage.removeItem("telaja_debug")}catch(e){} btn.remove(); box.remove(); window.__dbgRender=null; });
-    box.appendChild(bar); box.appendChild(pre);
-    function render(){ pre.textContent=text(); if(box.style.display!=="none") pre.scrollTop=pre.scrollHeight; }
-    window.__dbgRender=render;
-    btn.onclick=function(){ box.style.display=box.style.display==="none"?"flex":"none"; render(); };
-    document.body.appendChild(btn); document.body.appendChild(box); render();
-  });
-})();
-</script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238e80ff'/%3E%3Cstop offset='1' stop-color='%235442e0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='14' y='17' width='36' height='24' rx='4' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M32 41v7M24 48h16' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
@@ -200,7 +148,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
 .warn.l2{border-color:#a8531f;background:rgba(255,140,60,.14);color:#ffd2b0}
 .warn.l3{border-color:#a02a3a;background:rgba(255,90,106,.16);color:#ffc2ca}
 @media (max-width:760px){.search{order:3;flex-basis:100%;max-width:none}.top{padding:12px 16px;gap:12px}.wrap{padding:16px}.acts{margin-left:0;width:100%}}
-.ver{text-align:center;color:var(--muted);font-size:12px;opacity:.7;padding:18px 12px 28px}
 </style>
 </head>
 <body>
@@ -289,18 +236,12 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   </div>
 </div>
 <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
-<div class="ver" id="ver"></div>
 
 <script>
 (function(){
   var PREFIX = "compartilha-";
   var ALPHA = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", CODE_LEN = 3;
   var $ = function(id){return document.getElementById(id)};
-  function dbg(m){ try{ if(window.__dbg) window.__dbg(m); }catch(e){} }
-  var HOST_GRACE_MS = 8000;
-  var CAM_MODE = !(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-  var camFacing = "environment";
-  var graceT = null, graceI = null, graceConn = null, graceAt = 0, migDeadline = 0;
   var peer = null, stream = null, calls = [], conns = [], active = false, gotStream = false, joinTimer = null;
   var roomCode = "", isCreator = false, myId = "", creatorId = "", myName = "Você", creatorOpen = false;
   var members = {}, incoming = {}, tiles = {}, names = {};
@@ -345,7 +286,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     return a.filter(function(x){ return x.id===turnPick; })[0] || a[0];
   }
   function iceList(){ return STUN.concat(curProv().list); }
-  function probeTurn(list,ms){
+  function probeTurn(list){
     return new Promise(function(res){
       var pc, done=false;
       function fin(ok){ if(done) return; done=true; try{pc.close()}catch(e){} res(ok); }
@@ -354,7 +295,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
         pc.createDataChannel("t");
         pc.onicecandidate=function(e){ if(e.candidate && /typ relay/.test(e.candidate.candidate)) fin(true); };
         pc.createOffer().then(function(o){ return pc.setLocalDescription(o); }).catch(function(){ fin(false); });
-        setTimeout(function(){ fin(false); },ms||4000);
+        setTimeout(function(){ fin(false); },3000);
       }catch(e){ fin(false); }
     });
   }
@@ -363,27 +304,13 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     try{ var o=JSON.parse(localStorage.getItem(q.key)||"{}"); return o.m===monthKey() ? (+o.b||0)/(q.gb*1e9) : 0; }catch(e){ return 0; }
   }
   // Ordem: Cloudflare -> ExpressTURN -> Metered. Usa o primeiro que responde e ainda tem cota.
-  // Testa todos ao mesmo tempo (máx. 3 s) e escolhe pela ordem de preferência: Cloudflare, ExpressTURN, Metered.
   async function pickTurn(){
-    var all=providers(), ps=all.filter(function(p){ return usedFrac(p.id)<1; }), id=null;
-    if(ps.length){
-      var results=ps.map(function(){ return null; });
-      id=await new Promise(function(res){
-        var done=false;
-        function check(){
-          if(done) return;
-          for(var i=0;i<ps.length;i++){
-            if(results[i]===true){ done=true; res(ps[i].id); return; }
-            if(results[i]===null) return;
-          }
-          done=true; res(null);
-        }
-        ps.forEach(function(p,i){ probeTurn(p.list,3000).then(function(ok){ results[i]=!!ok; check(); }); });
-      });
-    }
-    turnPick=id||all[0].id;
-    dbg("TURN escolhido: "+turnPick+(id?"":" (nenhum respondeu)"));
+    var ps=providers();
+    var ok=await Promise.all(ps.map(function(p){ return usedFrac(p.id)>=1 ? Promise.resolve(false) : probeTurn(p.list); }));
+    var i=ok.indexOf(true);
+    turnPick=(i>=0?ps[i]:ps[0]).id;
     quota=loadQuota(); renderQuota();
+    dbg("TURN em uso: "+curProv().name+" (testes: "+ps.map(function(p,k){ return p.name+"="+(ok[k]?"ok":"falhou"); }).join(", ")+")");
   }
   function ensureTurn(){
     if(pickP && Date.now()-pickAt<600000) return pickP;
@@ -405,7 +332,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       if(c){ cfIce=c.list; cfAt=c.at; quota=loadQuota(); renderQuota(); return; }
     }
     try{
-      var ctl=new AbortController(), tm=setTimeout(function(){ ctl.abort(); },3500);
+      var ctl=new AbortController(), tm=setTimeout(function(){ ctl.abort(); },6000);
       var r=await fetch(CF_WORKER_URL,{cache:"no-store",signal:ctl.signal});
       clearTimeout(tm);
       if(!r.ok) throw new Error("http "+r.status);
@@ -570,22 +497,16 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var kbps=Math.max(2500,Math.min(50000,Math.round(w*h*f*(m==="game"?0.18:0.12)/1000)));
     return {h:h,w:w,f:f,mode:m,kbps:kbps};
   }
+  function capConstraintsCam(){
+    var q=qual();
+    return { video:{ facingMode:camFacing, width:{ ideal:q.w }, height:{ ideal:q.h }, frameRate:{ ideal:q.f, max:q.f } }, audio:true };
+  }
   function capConstraints(){
     var q=qual();
-    if(CAM_MODE){
-      var f=Math.min(q.f,30);
-      return { video:{ facingMode:{ideal:camFacing}, width:{ideal:q.w}, height:{ideal:q.h}, frameRate:{ideal:f,max:f} }, audio:{ echoCancellation:true, noiseSuppression:true } };
-    }
     return {
       video: { width: { ideal: q.w }, height: { ideal: q.h }, frameRate: { ideal: q.f, max: q.f } },
       audio: { suppressLocalAudioPlayback: true }
     };
-  }
-  async function getCapture(){
-    if(!CAM_MODE) return navigator.mediaDevices.getDisplayMedia(capConstraints());
-    var c=capConstraints();
-    try{ return await navigator.mediaDevices.getUserMedia(c); }
-    catch(e){ dbg("câmera com microfone falhou ("+(e&&e.name)+"); tentando sem microfone"); return await navigator.mediaDevices.getUserMedia({video:c.video,audio:false}); }
   }
   function hintTrack(st){
     try{
@@ -596,7 +517,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function describeCapture(){
     try{
       var st=stream.getVideoTracks()[0].getSettings();
-      return st.width+"×"+st.height+" a "+Math.round(st.frameRate||0)+" fps"+(stream.getAudioTracks().length?", com áudio":(CAM_MODE?", sem áudio (permita o microfone para enviar o som)":", sem áudio (para enviar o som, marque \"Compartilhar áudio\" ao escolher a tela)"));
+      return st.width+"×"+st.height+" a "+Math.round(st.frameRate||0)+" fps"+(stream.getAudioTracks().length?", com áudio":", sem áudio (para enviar o som, marque \"Compartilhar áudio\" ao escolher a tela)");
     }catch(e){ return ""; }
   }
   function tuneCall(c){
@@ -713,7 +634,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function setMsg(text, err){
     var t=$("toast");
     if(!text){ t.classList.add("hidden"); return; }
-    dbg((err?"[!] ":"")+text);
     t.textContent=text; t.classList.toggle("err",!!err); t.classList.remove("hidden");
     clearTimeout(toastTimer);
     toastTimer=setTimeout(function(){ t.classList.add("hidden"); }, err?14000:8000);
@@ -740,7 +660,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function sendAll(msg){ Object.keys(members).forEach(function(k){ sendTo(k,msg); }); }
   function nMembers(){ return Object.keys(members).length; }
 
-  var localTileHidden = false, migrating = false, stopping = false, redial = {};
+  var localTileHidden = false, migrating = false, stopping = false, redial = {}, camMode = false, camFacing = "user";
   var PH_DEFAULT = $("phText").textContent;
 
   // Oculta/mostra só a MINHA pré-visualização. O stream continua sendo enviado normalmente para quem assiste.
@@ -1009,7 +929,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       btnStart.style.color = "#ffb3bd";
       btnStart.disabled = false;
     } else {
-      btnStart.textContent = CAM_MODE ? "+ Transmitir câmera" : "+ Compartilhar tela";
+      btnStart.textContent = "+ Compartilhar tela";
       btnStart.style.background = "var(--accent)";
       btnStart.style.color = "#fff";
       btnStart.disabled = starting;
@@ -1027,7 +947,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     }
 
     $("btnSwitch").disabled = !sharing;
-    $("btnSwitch").textContent = CAM_MODE ? "Virar câmera" : "Trocar tela";
+    $("btnSwitch").textContent = camMode ? "Trocar câmera" : "Trocar tela";
     updateHideBtn();
     $("btnStop").disabled = !active;
     $("btnCopy").disabled = $("btnCopyCode").disabled = !roomCode;
@@ -1044,13 +964,14 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
 
   function stopAll(){
-    stopping=true; clearGrace();
+    stopping=true;
     clearTimeout(joinTimer); clearInterval(statsTimer); statsTimer=null; clearInterval(hostStatsTimer); keepAwake(false);
     calls.forEach(function(c){try{c.close()}catch(e){}});
     Object.keys(incoming).forEach(function(k){ try{incoming[k].close()}catch(e){} });
     conns.forEach(function(c){try{c.close()}catch(e){}});
     calls=[]; conns=[]; incoming={}; members={}; names={}; localTileHidden=false;
     if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
+    camMode=false;
     Object.keys(tiles).forEach(function(k){ removeTile(k); });
     gotStream=false; idlePaused=false; $("playBtn").textContent="▶ Toque para ver a tela"; $("playBtn").classList.add("hidden");
     if(peer){try{peer.destroy()}catch(e){} peer=null;}
@@ -1058,6 +979,29 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     setStatus("Pronto para transmitir",false);
     renderAll();
     stopping=false;
+  }
+  var VERSION = "2026.10.26-a", dbgLog = [], dbgOn = false;
+  function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
+  window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
+  window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
+  (function(){ var ce=console.error; console.error=function(){ dbg("console.error: "+[].slice.call(arguments).join(" ")); ce.apply(console,arguments); }; })();
+  function initDebug(){
+    var f=document.createElement("div"); f.style.cssText="text-align:center;font-size:12px;color:var(--muted);padding:16px"; f.textContent="Versão "+VERSION; document.body.appendChild(f);
+    try{ if(/[?&]debug=0/.test(location.search)) sessionStorage.removeItem("telaja_debug"); else if(/[?&]debug/.test(location.search)) sessionStorage.setItem("telaja_debug","1"); dbgOn=sessionStorage.getItem("telaja_debug")==="1"; }catch(e){}
+    if(!dbgOn) return;
+    var box=document.createElement("div");
+    box.style.cssText="position:fixed;right:8px;bottom:8px;width:min(460px,95vw);max-height:45vh;overflow:auto;background:#05060f;border:1px solid var(--line);border-radius:10px;padding:10px;font:12px/1.4 monospace;color:#cfd3ff;z-index:99999;white-space:pre-wrap";
+    var pre=document.createElement("div"), bar=document.createElement("div");
+    bar.innerHTML='<button class="pillbtn" style="padding:4px 10px;font-size:12px" id="dbgCopy">Copiar</button> <button class="pillbtn" style="padding:4px 10px;font-size:12px" id="dbgClose">Fechar</button>';
+    box.appendChild(bar); box.appendChild(pre); document.body.appendChild(box);
+    function txt(){
+      return "Versão "+VERSION+"\nPapel: "+(isCreator?"host":active?"participante":"fora da sala")+" | sala: "+(roomCode||"-")+" | eu: "+myName+
+        "\nTURN: "+curProv().name+" | pessoas: "+Object.keys(members).length+" | chamadas: "+calls.length+"/"+Object.keys(incoming).length+
+        " | sinalização: "+(peer?(peer.disconnected?"caída":"ok"):"-")+" | câmera: "+camMode+"\n---\n"+dbgLog.slice(-25).join("\n");
+    }
+    setInterval(function(){ pre.textContent=txt(); },1000);
+    $("dbgCopy").onclick=function(){ copy(txt(),this); };
+    $("dbgClose").onclick=function(){ box.remove(); };
   }
   function saveRoom(role){ try{ sessionStorage.setItem("telaja_room",JSON.stringify({code:roomCode,role:role,at:Date.now()})); }catch(e){} }
   function end(statusText,msg,err){
@@ -1070,17 +1014,16 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
 
   async function startShare(){
     if(stream||starting) return;
-    if(!navigator.mediaDevices||!(navigator.mediaDevices.getDisplayMedia||navigator.mediaDevices.getUserMedia)){
-      return setMsg("Este navegador não permite transmitir. Atualize o navegador e abra o site por HTTPS.",true);
+    var cam=!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia);
+    if(cam){
+      if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return setMsg("Este navegador não permite transmitir. Use o Chrome ou o Safari atualizado.",true);
+      if(!confirm("Este aparelho não permite compartilhar a tela (celulares só conseguem transmitir a câmera). Transmitir a câmera e o microfone?")) return;
     }
     starting=true; syncButtons();
     var st;
-    if(CAM_MODE) setMsg("O navegador do celular não permite compartilhar a tela, então você vai transmitir pela câmera.");
-    try{ st=await getCapture(); }
-    catch(e){
-      starting=false; syncButtons(); dbg("captura falhou: "+(e&&e.name));
-      return setMsg(CAM_MODE ? "Não foi possível abrir a câmera. Permita o acesso à câmera nas configurações do navegador e tente de novo." : "Compartilhamento cancelado. Escolha uma tela ou janela para continuar.",true);
-    }
+    try{ st=await (cam ? navigator.mediaDevices.getUserMedia(capConstraintsCam()) : navigator.mediaDevices.getDisplayMedia(capConstraints())); }
+    catch(e){ starting=false; syncButtons(); return setMsg(cam ? "Não foi possível usar a câmera. Permita o acesso à câmera e ao microfone e tente de novo." : "Compartilhamento cancelado. Escolha uma tela ou janela para continuar.",true); }
+    camMode=cam;
     hintTrack(st); stream=st; starting=false; keepAwake(true);
     bindEnded(st);
     if(active){
@@ -1107,6 +1050,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   function stopShare(msg){
     if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
+    camMode=false;
     calls.forEach(function(c){try{c.close()}catch(e){}}); calls=[];
     localTileHidden=false;
     removeTile("me");
@@ -1123,7 +1067,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(pc0) pc0.addEventListener("iceconnectionstatechange",function(){
       var st=pc0.iceConnectionState;
       c._down=(st==="disconnected"||st==="failed"); renderMembers();
-      if(st==="connected"||st==="completed") c._worked=true;
       if(st==="connected"||st==="completed"){ clearTimeout(rt); redial[id]=0; tuneCall(c); }
       else if(st==="disconnected"||st==="failed"){
         clearTimeout(rt);
@@ -1134,25 +1077,17 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
         }, st==="failed"?300:4000);
       }
     });
-    watchIce(c,function(){ if(c._known||c._worked) return; setMsg("Não foi possível conectar com "+nameOf(id)+" (a rede dela bloqueou a conexão). Peça para tentar de novo ou usar outra rede.",true); });
+    watchIce(c,function(){ if(c._known) return; setMsg("Não foi possível conectar com "+nameOf(id)+" (a rede dela bloqueou a conexão). Peça para tentar de novo ou usar outra rede.",true); });
     c.on("close",function(){ calls=calls.filter(function(x){ return x!==c; }); renderMembers(); });
   }
   async function switchScreen(){
     if(!active||!stream) return;
     var ns;
-    if(CAM_MODE){
-      var prev=camFacing; camFacing=(prev==="user")?"environment":"user";
-      stream.getTracks().forEach(function(t){ t.stop(); });
-      try{ ns=await getCapture(); }
-      catch(e){
-        camFacing=prev;
-        try{ ns=await getCapture(); }
-        catch(e2){ stopShare("Não foi possível usar a câmera. Clique em Transmitir para tentar de novo."); return; }
-        setMsg("Não foi possível virar a câmera.",true);
-      }
-    }else{
-      try{ ns=await getCapture(); }
-      catch(e){ return setMsg("Troca cancelada. Você continua compartilhando a tela anterior."); }
+    if(camMode) camFacing=(camFacing==="user"?"environment":"user");
+    try{ ns=await (camMode ? navigator.mediaDevices.getUserMedia(capConstraintsCam()) : navigator.mediaDevices.getDisplayMedia(capConstraints())); }
+    catch(e){
+      if(camMode) camFacing=(camFacing==="user"?"environment":"user");
+      return setMsg(camMode ? "Não foi possível trocar de câmera. Você continua com a câmera anterior." : "Troca cancelada. Você continua compartilhando a tela anterior.");
     }
     hintTrack(ns);
     var nv=ns.getVideoTracks()[0], na=ns.getAudioTracks()[0]||null;
@@ -1168,7 +1103,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     getTile("me","Você").video.srcObject=ns;
     bindEnded(ns);
     old.getTracks().forEach(function(t){t.stop()});
-    setMsg("Tela trocada. Quem está na sala já vê a nova tela. Capturando "+describeCapture()+".");
+    setMsg((camMode?"Câmera trocada. ":"Tela trocada. ")+"Quem está na sala já vê a nova imagem. Capturando "+describeCapture()+".");
   }
 
   function createRoom(fixed,tries,back){
@@ -1177,7 +1112,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     keepSignal(peer);
     isCreator=true;
     peer.on("error",function(err){
-      dbg("erro do servidor de sinal (sala): "+err.type);
       if(err.type==="unavailable-id"){
         try{peer.destroy()}catch(e){}
         if(!fixed){ createRoom(); return; }
@@ -1197,7 +1131,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     });
     wirePeer(peer);
     peer.on("open",function(id){
-      myId=id; creatorId=id; roomCode=code; myName=(fixed && /^Pessoa \d+$/.test(myName)) ? myName : "Pessoa 1"; names[id]=myName;
+      myId=id; creatorId=id; roomCode=code; myName="Pessoa 1"; names[id]=myName;
       history.replaceState(null,"",baseUrl()+"#"+code);
       clearInterval(hostStatsTimer); hostStatsTimer=setInterval(hostStats,3000);
       migrating=false;
@@ -1217,10 +1151,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var retry=opts.retry||0;
     var code=(raw||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
     if(code.length!==CODE_LEN) return setMsg("O código tem "+CODE_LEN+" letras ou números.",true);
-    var keep=null;
-    if(opts.keepStream){ keep=stream; stream=null; } else { myName="Você"; }
+    var keep=null, keepCam=camMode;
+    if(opts.keepStream){ keep=stream; stream=null; }
     if(active) stopAll();
-    stream=keep;
+    stream=keep; camMode=keep?keepCam:false;
     active=true; joining=true; gotStream=false; creatorOpen=false; isCreator=false; roomCode=code; creatorId=PREFIX+code;
     history.replaceState(null,"",baseUrl()+"#"+code);
     keepAwake(true);
@@ -1232,19 +1166,15 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     peer=new Peer(undefined, peerOpts());
     keepSignal(peer);
     joinTimer=setTimeout(function(){
-      if(creatorOpen) return;
-      if(migrating && Date.now()<migDeadline){ retake(code); return; }
-      end("", everLive ? "A transmissão terminou." : "Não encontramos a sala "+code+". Confira o código; a outra pessoa precisa estar transmitindo.", !everLive);
+      if(!creatorOpen) end("", everLive ? "A transmissão terminou." : "Não encontramos a sala "+code+". Confira o código; a outra pessoa precisa estar transmitindo.", !everLive);
     },15000);
     peer.on("error",function(err){
-      dbg("erro do servidor de sinal (entrada): "+err.type);
-      if(err.type==="peer-unavailable" && graceT && String(err.message||"").indexOf(creatorId)>=0){ clearGrace(); giveUpHost(); return; }
       if(err.type==="peer-unavailable"){
         if(!creatorOpen && retry>0){
           setTimeout(function(){ if(active&&!creatorOpen&&roomCode===code) join(code,{keepStream:true,retry:retry-1}); },2000);
           return;
         }
-        if(!creatorOpen && migrating && Date.now()<migDeadline){ retake(code); return; }
+        if(!creatorOpen && migrating){ dbg("ninguém assumiu a sala; assumindo"); promote(code); return; }
         if(!creatorOpen) end("", everLive ? "A transmissão terminou." : "Não encontramos a sala "+code+". Confira o código; a outra pessoa precisa estar transmitindo.", !everLive);
         return;
       }
@@ -1288,11 +1218,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     conn.on("open",function(){
       if(!active) return;
       var id=conn.peer, m=members[id]||(members[id]={id:id});
-      m.conn=conn; conn._grace=false;
-      if(!isCreator && outgoing && id===creatorId){
-        if(graceT){ clearGrace(); setMsg("Reconectado ao host."); }
-        if(/^Pessoa \d+$/.test(myName)){ try{ conn.send({t:"hi",name:myName,want:true}); }catch(e){} }
-      }
+      m.conn=conn;
       if(isCreator && !outgoing){
         m.name=names[id]||(names[id]=nextName()); names[id]=m.name;
         var list=[{id:myId,name:myName}];
@@ -1322,19 +1248,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           wireConn(peer.connect(e.id),true);
         });
         renderAll();
-      }else if(d.t==="names" && !isCreator){
-        (d.list||[]).forEach(function(e){
-          if(e.id===myId){ myName=e.name; }
-          else{ names[e.id]=e.name; if(members[e.id]) members[e.id].name=e.name; }
-        });
-        renderAll();
-      }else if(d.t==="hi" && d.want && isCreator){
-        var taken = d.name===myName || Object.keys(names).some(function(k){ return k!==id && names[k]===d.name; });
-        if(!taken){
-          names[id]=d.name; (members[id]||(members[id]={id:id})).name=d.name;
-          var nl=[{id:myId,name:myName}]; Object.keys(members).forEach(function(k){ nl.push({id:k,name:nameOf(k)}); });
-          sendAll({t:"names",list:nl}); renderAll();
-        }
       }else if(d.t==="hi"){
         names[id]=d.name; (members[id]||(members[id]={id:id})).name=d.name; renderAll();
       }
@@ -1354,74 +1267,63 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     }
   }
   async function rehost(code){
+    dbg("voltando para a sala "+code+" como host");
     active=true; roomCode=code;
     setStatus("Voltando para a sala…",false); setMsg("Voltando para a sala "+code+"…");
     renderAll();
     await refreshCf(); await ensureTurn();
     if(!active) return;
-    migrating=true; migDeadline=Date.now()+90000;
+    migrating=true;
     createRoom(code,6,true);
   }
   function numOf(n){ var m=/(\d+)\s*$/.exec(n||""); return m ? +m[1] : 1e9; }
   function kickMember(id){
     var m=members[id]; if(!isCreator||!m) return;
-    m.kicked=true; sendTo(id,"kick");
+    dbg("removendo "+nameOf(id)); m.kicked=true; sendTo(id,"kick");
     setTimeout(function(){ try{ if(m.conn) m.conn.close(); }catch(e){} },400);
   }
-  function clearGrace(){ clearTimeout(graceT); clearInterval(graceI); graceT=null; graceI=null; graceConn=null; }
-  // Queda curta do host: espera alguns segundos tentando reconectar antes de eleger outro host.
-  function hostLost(){
-    if(graceT) return;
-    var code=roomCode;
-    dbg("conexão com o host caiu; esperando "+HOST_GRACE_MS+" ms antes de eleger outro");
-    setMsg("A conexão com o host caiu. Tentando reconectar por alguns segundos…",true);
-    graceT=setTimeout(function(){
-      clearGrace();
-      if(!active||isCreator||roomCode!==code||migrating) return;
-      giveUpHost();
-    },HOST_GRACE_MS);
-    graceI=setInterval(function(){ tryHostAgain(code); },2000);
-    tryHostAgain(code);
-  }
-  function giveUpHost(){
-    if(nMembers()===0 && !stream){ end("","O host saiu. A sala foi encerrada."); return; }
-    hostLeft();
-  }
-  function tryHostAgain(code){
-    if(!graceT||!active||isCreator||roomCode!==code||!peer||peer.destroyed) return;
-    if(peer.disconnected){ try{ peer.reconnect(); }catch(e){} return; }
-    if(graceConn && !graceConn.open && Date.now()-graceAt<3500) return;
-    try{ if(graceConn) graceConn.close(); }catch(e){}
-    graceConn=peer.connect(creatorId); graceAt=Date.now(); graceConn._grace=true;
-    wireConn(graceConn,true);
-  }
-  // Ninguém virou host a tempo (ex.: o id do host antigo ainda está preso no servidor): tenta assumir a sala.
-  function retake(code){
-    dbg("tentando assumir a sala "+code);
-    var keep=stream; stream=null; stopAll(); stream=keep;
-    active=true; keepAwake(true);
-    setStatus("Assumindo a sala…",false); setMsg("Assumindo a sala "+code+"…");
-    createRoom(code,2);
+  function snapshotCands(){
+    var cand=[{id:myId,n:numOf(myName)}];
+    Object.keys(members).forEach(function(k){ if(k!==creatorId) cand.push({id:k,n:numOf(nameOf(k))}); });
+    cand.sort(function(a,b){ return a.n-b.n || (a.id<b.id?-1:1); });
+    return cand;
   }
   function hostLeft(){
-    migDeadline=Date.now()+90000;
-    var code=roomCode, cand=[{id:myId,n:numOf(myName)}];
-    Object.keys(members).forEach(function(k){ cand.push({id:k,n:numOf(nameOf(k))}); });
-    cand.sort(function(a,b){ return a.n-b.n || (a.id<b.id?-1:1); });
-    migrating=true;
-    if(cand[0].id===myId){
-      var keep=stream; stream=null; stopAll(); stream=keep;
-      active=true; keepAwake(true);
-      setStatus("Assumindo a sala…",false); setMsg("O host saiu. Você agora é o host da sala "+code+".");
-      createRoom(code,2);
-    }else{
-      setMsg("O host saiu. "+nameOf(cand[0].id)+" vai assumir a sala…");
-      setTimeout(function(){ if(active&&migrating) join(code,{keepStream:true,retry:12}); },1000);
-    }
+    migrating=true; dbg("host sumiu; testando se ele volta");
+    var tries=0, snap=snapshotCands();
+    if(snap.length===1&&!stream) setMsg("O host saiu. Esperando ele voltar…");
+    (function probe(){
+      if(!active||!migrating||isCreator) return;
+      var c, ok=false;
+      try{ c=peer.connect(creatorId); }catch(e){ return electHost(snap); }
+      c.on("open",function(){
+        ok=true; try{ c.close(); }catch(e){}
+        if(active&&migrating){ dbg("o host voltou; entrando de novo"); join(roomCode,{keepStream:true,retry:4}); }
+      });
+      setTimeout(function(){
+        if(ok||!active||!migrating) return;
+        try{ c.close(); }catch(e){}
+        if(++tries<4) probe(); else electHost(snap);
+      },2000);
+    })();
+  }
+  function promote(code){
+    var keep=stream, cm=camMode; stream=null; stopAll(); stream=keep; camMode=keep?cm:false;
+    active=true; keepAwake(true);
+    setStatus("Assumindo a sala…",false); setMsg("O host saiu. Você agora é o host da sala "+code+".");
+    createRoom(code,6);
+  }
+  function electHost(snap){
+    var code=roomCode, rank=0;
+    snap.forEach(function(c,i){ if(c.id===myId) rank=i; });
+    dbg("eleição: sou o nº "+(rank+1)+" da fila ("+snap.length+" candidatos)");
+    if(snap.length===1&&!stream) return end("","O host saiu e a sala foi encerrada.");
+    if(rank===0) return promote(code);
+    setMsg("O host saiu. "+nameOf(snap[0].id)+" vai assumir a sala…");
+    setTimeout(function(){ if(active&&migrating) join(code,{keepStream:true,retry:4+rank*4}); },1500);
   }
   function onGone(conn){
     if(!active||stopping) return;
-    if(conn._grace) return;
     var id=conn.peer, m=members[id], nm=nameOf(id), kicked=m&&m.kicked;
     if(!m && migrating) return;
     if(m && m.conn && m.conn!==conn) return;
@@ -1433,9 +1335,12 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(active) setMsg(nm+(kicked?" foi removida da sala.":" saiu da sala."));
     renderAll(); updateHostStatus();
 
-    if(!isCreator && id===creatorId && creatorOpen && !migrating){ hostLost(); return; }
+    if(!isCreator && id===creatorId && creatorOpen && !migrating){ hostLeft(); return; }
     if(nMembers() === 0 && !stream && !migrating && Object.keys(incoming).length === 0){
-      end("", "Todos os participantes saíram. A sala foi encerrada.");
+      var gate=roomCode;
+      setTimeout(function(){
+        if(active && roomCode===gate && !migrating && !stream && nMembers()===0 && Object.keys(incoming).length===0) end("", "Todos os participantes saíram. A sala foi encerrada.");
+      },20000);
     }
   }
 
@@ -1451,7 +1356,6 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     incoming[id]=call;
     if(pcv) pcv.addEventListener("iceconnectionstatechange",function(){
       var st=pcv.iceConnectionState, down=(st==="disconnected"||st==="failed");
-      if(st==="connected"||st==="completed") call._worked=true;
       call._down=down; if(tiles[id]) tiles[id].reco.classList.toggle("on",down);
       renderMembers();
       if(st==="connected"||st==="completed") clearTimeout(vt);
@@ -1463,8 +1367,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       }
     });
     watchIce(call,function(){
-      if(incoming[id]!==call) return;
-      if(call._worked){ setMsg("A conexão com "+nameOf(id)+" ficou instável. Reconectando…"); return; }
+      if(incoming[id]!==call||call._known) return;
       dropIncoming(id);
       setMsg("A conexão com "+nameOf(id)+" foi bloqueada pela rede. Tente em outra rede ou peça para a outra pessoa tentar de novo.",true);
     });
@@ -1642,6 +1545,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   renderQuota();
   $("selRelay").onchange=function(){ calls.forEach(tuneCall); };
   $("selRes").onchange=applyQuality; $("selFps").onchange=applyQuality; $("selMode").onchange=applyQuality; $("selHardware").onchange=applyQuality;
+  initDebug();
   $("btnTurn").onclick=function(){ refreshCf(true).then(function(){ pickAt=0; return ensureTurn(); }).then(testTurn); };
   refreshCf().then(ensureTurn).then(autoTest);
 
@@ -1668,19 +1572,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   $("codeIn").addEventListener("keydown",function(e){ if(e.key==="Enter") tryJoin(this.value); });
   $("btnFull").onclick=function(){
     var el=$("stage");
-    if(document.fullscreenElement||document.webkitFullscreenElement){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); }
-    else if(el.requestFullscreen) el.requestFullscreen();
-    else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-    else{
-      var vs=el.querySelectorAll("video"), vv=null;
-      for(var i=0;i<vs.length;i++){ if(vs[i].srcObject && vs[i].webkitEnterFullscreen){ vv=vs[i]; if(vs[i].muted===false||i===vs.length-1) break; } }
-      if(vv){ try{ vv.webkitEnterFullscreen(); }catch(e){} }
-    }
+    if(document.fullscreenElement) document.exitFullscreen(); else if(el.requestFullscreen) el.requestFullscreen();
   };
   window.addEventListener("beforeunload",stopAll);
 
-  $("ver").textContent="Compartilhe sua tela · "+(window.TELAJA_VER||"");
-  dbg("página carregada; modo: "+(CAM_MODE?"câmera (celular)":"tela"));
   renderAll();
   if(location.hash.length>1){
     var hc=location.hash.slice(1); $("codeIn").value=hc.toUpperCase();
