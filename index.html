@@ -247,7 +247,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   var roomCode = "", isCreator = false, myId = "", creatorId = "", myName = "Você", creatorOpen = false;
   var members = {}, incoming = {}, tiles = {}, names = {};
   var viewConn = null, statsTimer = null, lastDiag = "";
-  var idlePaused = false, lastAct = Date.now(), userMuted = false, userPaused = false, joining = false, starting = false;
+  var idlePaused = false, lastAct = Date.now(), userMuted = false, forcedMute = false, userPaused = false, joining = false, starting = false;
   var hostStatsTimer = null, wakeLock = null, reconnects = 0, everLive = false, relayUsed = 0, totalUsed = 0;
 
   var CF_WORKER_URL = "https://patient-math-9da9.brunosamuel1524.workers.dev";
@@ -999,7 +999,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.27-c", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.27-d", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
@@ -1396,7 +1396,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       var t=getTile(id,nameOf(id)), v=t.video;
       if(v.srcObject===remote) return;
       gotStream=true; everLive=true; clearTimeout(joinTimer);
-      v.srcObject=remote; v.muted=userMuted;
+      v.srcObject=remote; v.muted=userMuted||forcedMute;
       tryPlay(v);
       setStatus("Assistindo ao vivo",true); setMsg("Você está assistindo à tela de "+nameOf(id)+".");
       watchFrames(id,v);
@@ -1469,7 +1469,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   function tryPlay(v){
     v.play().then(function(){ $("playBtn").classList.add("hidden"); },function(){
-      v.muted=true;
+      v.muted=true; forcedMute=true; $("btnMute").classList.add("off");
       v.play().then(function(){ $("playBtn").classList.add("hidden"); },function(){ $("playBtn").classList.remove("hidden"); });
     });
   }
@@ -1513,7 +1513,18 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   };
   $("btnRestoreMe").onclick=function(){ setLocalHidden(false); };
   $("btnHideMe").onclick=function(){ setLocalHidden(!localTileHidden); };
+  function unforce(){
+    if(!forcedMute) return;
+    forcedMute=false;
+    if(userMuted) return;
+    remoteVideos().forEach(function(v){ v.muted=false; v.play().catch(function(){}); });
+    $("btnMute").classList.remove("off");
+  }
+  ["pointerdown","keydown","touchstart"].forEach(function(ev){
+    document.addEventListener(ev,function(e){ if(e.type==="keydown"&&(e.key||"").toLowerCase()==="m") return; unforce(); },{passive:true});
+  });
   $("btnMute").onclick=function(){
+    if(forcedMute){ unforce(); return; }
     userMuted=!userMuted;
     remoteVideos().forEach(function(v){ v.muted=userMuted; });
     this.classList.toggle("off",userMuted);
