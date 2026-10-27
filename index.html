@@ -205,6 +205,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
         <label class="chip"><select id="selMode" aria-label="Modo"><option value="auto">Modo Automático</option><option value="game" selected>Modo Jogo</option><option value="text">Modo Texto</option></select></label>
         <label class="chip"><span>Encoder (Hardware)</span><select id="selHardware"><option value="auto">Automático</option><option value="gpu" selected>Placa de Vídeo (GPU / NVENC)</option><option value="cpu">Processador (CPU)</option></select></label>
         <label class="chip"><span>Limite via servidor</span><select id="selRelay"><option value="2000">2 Mbps</option><option value="3000">3 Mbps</option><option value="4000" selected>4 Mbps</option><option value="6000">6 Mbps</option><option value="10000">10 Mbps</option><option value="0">Sem limite</option></select></label>
+        <label class="chip"><span>Áudio</span><select id="selAudio"><option value="system">Do sistema (tudo)</option><option value="none">Sem áudio</option></select></label>
+        <button class="linkbtn" id="btnAudioList" style="margin:0 0 0 4px">Procurar entradas de áudio (cabo virtual)</button>
       </div>
     </section>
 
@@ -499,14 +501,38 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   function capConstraintsCam(){
     var q=qual();
-    return { video:{ facingMode:camFacing, width:{ ideal:q.w }, height:{ ideal:q.h }, frameRate:{ ideal:q.f, max:q.f } }, audio:true };
+    return { video:{ facingMode:camFacing, width:{ ideal:q.w }, height:{ ideal:q.h }, frameRate:{ ideal:q.f, max:q.f } }, audio:audioCons() };
   }
   function capConstraints(){
     var q=qual();
     return {
       video: { width: { ideal: q.w }, height: { ideal: q.h }, frameRate: { ideal: q.f, max: q.f } },
-      audio: { suppressLocalAudioPlayback: true }
+      audio: audioChoice()==="system"
     };
+  }
+  function audioChoice(){ return $("selAudio").value; }
+  function devId(){ var v=audioChoice(); return v.indexOf("dev:")===0 ? v.slice(4) : null; }
+  function audioCons(){
+    var v=audioChoice(); if(v==="none") return false;
+    var id=devId();
+    return id ? { deviceId:{ exact:id }, echoCancellation:false, noiseSuppression:false, autoGainControl:false } : true;
+  }
+  async function addDeviceAudio(st){
+    if(!devId()) return;
+    try{
+      var a=await navigator.mediaDevices.getUserMedia({ audio:audioCons() });
+      a.getAudioTracks().forEach(function(t){ st.addTrack(t); });
+    }catch(e){ setMsg("Não foi possível usar essa entrada de áudio. Transmitindo sem áudio.",true); }
+  }
+  async function listAudioInputs(){
+    try{ var t=await navigator.mediaDevices.getUserMedia({ audio:true }); t.getTracks().forEach(function(x){ x.stop(); }); }
+    catch(e){ return setMsg("Permita o acesso ao microfone para listar as entradas de áudio.",true); }
+    var devs=(await navigator.mediaDevices.enumerateDevices()).filter(function(d){ return d.kind==="audioinput" && d.deviceId!=="default" && d.deviceId!=="communications"; });
+    var sel=$("selAudio"), cur=sel.value;
+    [].slice.call(sel.options).filter(function(o){ return o.value.indexOf("dev:")===0; }).forEach(function(o){ o.remove(); });
+    devs.forEach(function(d,i){ var o=document.createElement("option"); o.value="dev:"+d.deviceId; o.textContent=d.label||("Entrada de áudio "+(i+1)); sel.appendChild(o); });
+    if([].some.call(sel.options,function(o){ return o.value===cur; })) sel.value=cur;
+    setMsg(devs.length ? "Escolha a entrada do cabo virtual (por exemplo, CABLE Output) no seletor Áudio." : "Nenhuma entrada de áudio encontrada.");
   }
   function hintTrack(st){
     try{
@@ -980,7 +1006,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.26-a", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.27-a", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
@@ -1024,6 +1050,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     try{ st=await (cam ? navigator.mediaDevices.getUserMedia(capConstraintsCam()) : navigator.mediaDevices.getDisplayMedia(capConstraints())); }
     catch(e){ starting=false; syncButtons(); return setMsg(cam ? "Não foi possível usar a câmera. Permita o acesso à câmera e ao microfone e tente de novo." : "Compartilhamento cancelado. Escolha uma tela ou janela para continuar.",true); }
     camMode=cam;
+    if(!cam) await addDeviceAudio(st);
     hintTrack(st); stream=st; starting=false; keepAwake(true);
     bindEnded(st);
     if(active){
@@ -1089,6 +1116,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       if(camMode) camFacing=(camFacing==="user"?"environment":"user");
       return setMsg(camMode ? "Não foi possível trocar de câmera. Você continua com a câmera anterior." : "Troca cancelada. Você continua compartilhando a tela anterior.");
     }
+    if(!camMode) await addDeviceAudio(ns);
     hintTrack(ns);
     var nv=ns.getVideoTracks()[0], na=ns.getAudioTracks()[0]||null;
     calls.forEach(function(c){
@@ -1546,6 +1574,18 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   $("selRelay").onchange=function(){ calls.forEach(tuneCall); };
   $("selRes").onchange=applyQuality; $("selFps").onchange=applyQuality; $("selMode").onchange=applyQuality; $("selHardware").onchange=applyQuality;
   initDebug();
+  (function(){
+    var sel=$("selAudio");
+    try{
+      var sv=JSON.parse(localStorage.getItem("telaja_audio")||"null");
+      if(sv && sv.v){
+        if(sv.v.indexOf("dev:")===0){ var o=document.createElement("option"); o.value=sv.v; o.textContent=sv.l||"Entrada de áudio salva"; sel.appendChild(o); }
+        sel.value=sv.v;
+      }
+    }catch(e){}
+    sel.onchange=function(){ try{ localStorage.setItem("telaja_audio",JSON.stringify({v:sel.value,l:sel.options[sel.selectedIndex].textContent})); }catch(e){} };
+    $("btnAudioList").onclick=listAudioInputs;
+  })();
   $("btnTurn").onclick=function(){ refreshCf(true).then(function(){ pickAt=0; return ensureTurn(); }).then(testTurn); };
   refreshCf().then(ensureTurn).then(autoTest);
 
