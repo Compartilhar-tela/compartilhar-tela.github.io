@@ -88,6 +88,15 @@ button:hover:not(:disabled){filter:brightness(1.12)}
 .tile .net-dot.amber{background:var(--amber)}
 .tile .net-dot.red{background:var(--red)}
 .tile .vol-slider{width:50px;height:4px;accent-color:var(--accent2);cursor:pointer;vertical-align:middle}
+#volSlider{-webkit-appearance:none;appearance:none;width:90px;height:4px;border-radius:999px;border:0;outline:none;box-shadow:none;cursor:pointer;vertical-align:middle;--v:100%;background:linear-gradient(to right,#fff var(--v),rgba(255,255,255,.25) var(--v))}
+#volSlider:focus,#volSlider:focus-visible{outline:none;box-shadow:none}
+#volSlider::-webkit-slider-runnable-track{height:4px;border-radius:999px;background:transparent}
+#volSlider::-moz-range-track{height:4px;border-radius:999px;background:transparent}
+#volSlider::-moz-range-progress{height:4px;border-radius:999px;background:transparent}
+#volSlider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;margin-top:-4px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:transform .15s ease}
+#volSlider::-moz-range-thumb{width:12px;height:12px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:transform .15s ease}
+#volSlider:hover::-webkit-slider-thumb,#volSlider:active::-webkit-slider-thumb{transform:scale(1.2)}
+#volSlider:hover::-moz-range-thumb,#volSlider:active::-moz-range-thumb{transform:scale(1.2)}
 .tile-action-btn{background:none;border:0;padding:0;color:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;margin-left:4px;}
 .tile-action-btn:hover{color:var(--accent2);}
 .tiles.n1 .tag{display:none}
@@ -180,7 +189,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           <button class="ico-btn" id="btnPlay" aria-label="Pausar ou continuar"><svg id="icoPlay" width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button>
           <button class="ico-btn hidden" id="btnRestoreMe" aria-label="Mostrar minha transmissão" title="Mostrar minha transmissão"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M8 10l3 3 5-5"/></svg></button>
           <button class="ico-btn" id="btnMute" aria-label="Som"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM17 8a5 5 0 010 8"/></svg></button>
-          <input type="range" id="volSlider" min="0" max="1" step="0.05" value="1" aria-label="Volume" title="Volume" style="width:90px;accent-color:var(--accent2)">
+          <input type="range" id="volSlider" min="0" max="1" step="0.05" value="1" aria-label="Volume" title="Volume">
           <span class="status" id="status">Pronto para transmitir</span>
           <button class="ico-btn right" id="btnFull" disabled aria-label="Tela cheia"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
         </div>
@@ -1590,6 +1599,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function applyVol(){
     remoteVideos().forEach(function(v){ v.volume=userVol; v.muted=userMuted; });
     $("btnMute").classList.toggle("off",userMuted);
+    $("volSlider").style.setProperty("--v",(+$("volSlider").value*100)+"%");
   }
   $("btnMute").onclick=function(){
     if(forcedMute){ unforce(); return; }
