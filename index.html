@@ -67,8 +67,8 @@ button:hover:not(:disabled){filter:brightness(1.12)}
 .gmenu button:hover{background:#1a1f3d}
 .nmodal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;overflow:auto;
 background:
-url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='none' stroke='white' stroke-opacity='.16' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='24' y='28' width='64' height='42' rx='7'/%3E%3Cpath d='M44 88h24M56 70v18'/%3E%3Crect x='128' y='128' width='64' height='42' rx='7'/%3E%3Cpath d='M148 188h24M160 170v18'/%3E%3Cpath d='M150 48l22 14-22 14z'/%3E%3C/svg%3E"),
-linear-gradient(135deg,#8a7dff 0%,#6d5df0 45%,#4a39d6 100%)}
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='none' stroke='white' stroke-opacity='.18' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='24' y='28' width='64' height='42' rx='7'/%3E%3Cpath d='M44 88h24M56 70v18'/%3E%3Crect x='128' y='128' width='64' height='42' rx='7'/%3E%3Cpath d='M148 188h24M160 170v18'/%3E%3Cpath d='M150 48l22 14-22 14z'/%3E%3C/svg%3E"),
+linear-gradient(135deg,#190d84 0%,#1d1091 50%,#2c20a2 100%)}
 .nlogo{display:flex;align-items:center;gap:10px;margin:0 0 18px;font-weight:800;font-size:18px}
 .nlogo .ico{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7a6bff,#5a49e0);display:grid;place-items:center}
 .nlogo small{color:var(--accent2);font-size:10px;font-weight:700}
@@ -1104,7 +1104,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.29-f", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.29-g", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
