@@ -81,10 +81,82 @@ linear-gradient(135deg,#190d84 0%,#1d1091 50%,#2c20a2 100%)}
 .ncard .nrow button{padding:11px 20px;border-radius:999px;border:1px solid var(--line);background:#1a1f3d;font-weight:600}
 .ncard .nrow #btnNick{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
 .cta{padding:11px 20px;border-radius:999px;border:0;background:var(--accent);color:#fff;font-weight:700}
-.wrap{max-width:1360px;margin:0 auto;padding:24px;width:100%}
-.main{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
-.col-main{flex:1 1 640px;min-width:0}
-.col-side{flex:0 1 380px;min-width:300px;display:flex;flex-direction:column;gap:16px}
+.wrap{max-width:1800px;margin:0 auto;padding:18px 20px;width:100%}
+.main{display:grid;grid-template-columns:280px minmax(0,1fr) 340px;gap:18px;align-items:start}
+.col-left{display:flex;flex-direction:column;gap:14px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;min-width:0}
+.col-main{min-width:0;padding-bottom:12px}
+.col-side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.phead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+.phead .ctitle{margin:0}
+.pcount{min-width:26px;text-align:center;padding:2px 9px;border-radius:999px;background:#1a1f3d;border:1px solid var(--line);font-size:12px;font-weight:700}
+details.card>summary{cursor:pointer;font-weight:700;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:8px}
+details.card>summary::after{content:"";flex:none;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;margin-right:4px}
+details.card[open]>summary::after{transform:rotate(-135deg)}
+details.card>summary:focus-visible{outline:none;box-shadow:0 0 0 2px rgba(138,125,255,.4)}
+.qset{display:flex;flex-direction:column;gap:6px}
+.srow{display:grid;grid-template-columns:104px minmax(0,1fr);align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:#161b34}
+.srow>span{color:var(--muted);font-size:12px;font-weight:600;line-height:1.25}
+.srow select{width:100%;min-width:0;appearance:none;-webkit-appearance:none;padding:9px 32px 9px 12px;border-radius:9px;border:1px solid var(--line);background-color:#20264a;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c0baff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer;text-overflow:ellipsis}
+.srow select:hover{border-color:rgba(138,125,255,.7)}
+.srow select:focus-visible{outline:none;border-color:#8a7dff;box-shadow:0 0 0 2px rgba(138,125,255,.25)}
+.srow select option{background:#20264a;color:var(--ink)}
+details.card>summary::-webkit-details-marker{display:none}
+details.card[open]>summary{margin-bottom:12px}
+details.card .chips{display:flex;flex-direction:column;gap:8px}
+.dock{position:sticky;bottom:12px;z-index:20;margin:14px auto 0;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;width:fit-content;max-width:100%;padding:10px 12px;border-radius:18px;background:rgba(14,17,36,.94);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.45);backdrop-filter:blur(8px)}
+.dock .pillbtn{white-space:nowrap}
+.mmodal{position:fixed;inset:0;z-index:1100;background:rgba(5,6,16,.72);display:grid;place-items:center;padding:20px}
+.mcard{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.mhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px;font-size:16px}
+.mhead button{width:28px;height:28px;border-radius:50%;border:0;background:transparent;font-size:20px;line-height:1;color:var(--muted)}
+.mhead button:hover{background:#1a1f3d;color:var(--ink)}
+.mlbl{margin:14px 0 8px;font-size:13px;font-weight:600;color:var(--muted)}
+.mplat{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mplat button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);font-weight:600;font-size:13px}
+.mplat button.on{border-color:#e5383b;background:rgba(229,56,59,.14);color:#ff8d95}
+.mrad{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:14px;cursor:pointer}
+.mrad input{accent-color:var(--accent2);width:16px;height:16px}
+#mUrl,#mSong{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:14px}
+#mUrl::placeholder,#mSong::placeholder{color:#6c7199}
+.merr{margin:10px 0 0;color:#ff8d95;font-size:13px;line-height:1.4}
+.mhint{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:#161b34;color:var(--muted);font-size:12.5px;line-height:1.45}
+#mpAud{grid-column:1 / -1;flex-direction:row;justify-content:center}
+.musbadge{position:fixed;left:16px;bottom:16px;z-index:45;width:268px;max-width:calc(100vw - 32px);padding:10px 12px;border-radius:16px;background:rgba(14,17,36,.97);border:1px solid var(--line);box-shadow:0 10px 28px rgba(0,0,0,.5);font-size:13px}
+.musbadge .mhd{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:700}
+.musbadge .mhd span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.musbadge button{border:1px solid var(--line);background:#1a1f3d;color:var(--ink);font-weight:600;font-size:12px;border-radius:999px}
+.musbadge #btnMusMin{flex:none;width:26px;height:26px;padding:0;font-size:16px;line-height:1}
+.musbadge .mbody{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.musbadge.min .mbody{display:none}
+.musbadge .mrow{display:flex;align-items:center;gap:10px}
+.musbadge #btnMusMute{flex:none;width:32px;height:32px;padding:0;font-size:15px}
+.musbadge #musVol{flex:1;min-width:0;height:4px;accent-color:var(--accent2);cursor:pointer}
+.musbadge #musPct{flex:none;width:38px;text-align:right;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.musbadge #btnMusPlay,.musbadge #btnMusStop{padding:9px 12px}
+.musbadge #btnMusPlay{background:var(--accent);border-color:var(--accent);color:#fff}
+.musbadge .mhd{gap:10px}
+.musbadge .mcover{flex:none;width:46px;height:46px;border-radius:10px;object-fit:cover;background:#1a1f3d}
+.musbadge .mtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.musbadge #musTitle{font-weight:800;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.musbadge.has-title #musText{font-size:12px;color:var(--muted);font-weight:600}
+.musbadge #musSong{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:12px}
+.musbadge #btnMusSong{flex:none;padding:8px 12px}
+.vidcap{display:flex;align-items:center;gap:8px;margin-top:6px;padding:6px 8px;border-radius:10px;background:rgba(14,17,36,.96);border:1px solid var(--line);font-size:12px;font-weight:700}
+.vidcap img{flex:none;width:34px;height:34px;border-radius:6px;object-fit:cover}
+.vidcap span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.musbadge .mnote{color:var(--muted);font-size:12px;line-height:1.4}
+body.has-badge .vidstage.music{bottom:var(--badgeh,70px)}
+.mbtn{width:100%;margin-top:16px;padding:13px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:700}
+#btnVidClear{position:absolute;right:8px;top:8px;z-index:3;width:30px;height:30px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(9,11,24,.85);color:#fff;font-size:18px;line-height:1}
+#btnVidClear:hover{background:var(--red)}
+#vidSlot.locked{pointer-events:none}
+.vidstage.music{position:fixed;left:16px;bottom:16px;width:260px;margin:0;z-index:40}
+.vidstage.music::before{content:"🎵 Música da sala";display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 4px}
+.vidstage.sp .vidbox{aspect-ratio:auto;height:152px}
+.vidstage.music.sp{width:300px}
+.vidstage.music .vidbox{border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+@media(max-width:1180px){.main{grid-template-columns:240px minmax(0,1fr)}.col-side{grid-column:1 / -1}}
+@media(max-width:820px){.main{grid-template-columns:1fr}.col-main{order:1}.col-left{order:2;position:static;max-height:none}.col-side{order:3}.vidstage.music{width:200px}}
 .stage{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#05060f;display:flex;align-items:center;justify-content:center}
 .stage:fullscreen{aspect-ratio:auto;border-radius:0}
 .stage.hide-ui{cursor:none}
@@ -94,7 +166,7 @@ linear-gradient(135deg,#190d84 0%,#1d1091 50%,#2c20a2 100%)}
 .tiles.n1{grid-template-columns:1fr}
 .tiles.n2{grid-template-columns:1fr 1fr;grid-template-rows:1fr}
 .tiles.n3,.tiles.n4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
-.tiles.n5{grid-template-columns:repeat(3,1fr)}
+.tiles.n5{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr)}
 
 .tiles.has-local-remote{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr;position:relative}
 .tiles.has-local-remote .tile{position:relative!important;width:100%!important;height:100%!important;right:auto!important;bottom:auto!important;top:auto!important;left:auto!important;border:none!important;box-shadow:none!important;aspect-ratio:auto!important}
@@ -124,9 +196,9 @@ linear-gradient(135deg,#190d84 0%,#1d1091 50%,#2c20a2 100%)}
 #vidSlot{position:absolute;inset:0}
 #vidSlot video,#vidSlot iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 #vidTap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:14px 22px;border-radius:999px;border:0;background:var(--accent);color:#fff;font-weight:700;z-index:2}
-#vidUrl{flex:1;min-width:0;padding:10px 14px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);font:inherit;font-size:14px}
-#vidUrl::placeholder{color:#6c7199}
-#btnVidLoad{padding:11px 16px;border-radius:10px;border:1px solid var(--line);background:#1a1f3d;font-weight:600}
+#vidUrl,#musUrl{flex:1;min-width:0;padding:10px 14px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);font:inherit;font-size:14px}
+#vidUrl::placeholder,#musUrl::placeholder{color:#6c7199}
+#btnVidLoad,#btnMusLoad{padding:11px 16px;border-radius:10px;border:1px solid var(--line);background:#1a1f3d;font-weight:600}
 #volSlider:hover::-moz-range-thumb,#volSlider:active::-moz-range-thumb{transform:scale(1.2)}
 .tile-action-btn{background:none;border:0;padding:0;color:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;margin-left:4px;}
 .tile-action-btn:hover{color:var(--accent2);}
@@ -191,6 +263,45 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
 </style>
 </head>
 <body>
+<div class="musbadge hidden" id="musBadge">
+  <div class="mhd"><img id="musCover" class="mcover hidden" alt="" width="46" height="46"><div class="mtx"><div id="musTitle" class="hidden"></div><span id="musText"></span></div><button id="btnMusMin" aria-label="Minimizar" title="Minimizar">–</button></div>
+  <div class="mbody">
+    <div class="mrow hidden" id="musListen">
+      <button id="btnMusMute" aria-label="Silenciar a música" title="Silenciar">🔊</button>
+      <input type="range" id="musVol" min="0" max="1" step="0.01" value="1" aria-label="Volume da música">
+      <span id="musPct">100%</span>
+    </div>
+    <button id="btnMusPlay" class="hidden">▶ Tocar música</button>
+    <div class="mrow hidden" id="musEdit"><input id="musSong" maxlength="80" placeholder="Música tocando agora" aria-label="Nome da música"><button id="btnMusSong">OK</button></div>
+    <div class="mnote hidden" id="musNote">O volume que todos ouvem é o do seu player (Spotify, YouTube...). Aqui você só para de compartilhar.</div>
+    <button id="btnMusStop" class="hidden">Parar de compartilhar</button>
+  </div>
+</div>
+<div class="mmodal hidden" id="mediaModal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="mcard">
+    <div class="mhead"><b id="mTitle">Adicionar vídeo</b><button id="mClose" aria-label="Fechar">×</button></div>
+    <div class="mlbl" style="margin-top:0">Plataforma</div>
+    <div class="mplat">
+      <button id="mpSp" class="hidden"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#1ed760"/><path d="M6.5 9.3c3.6-1.1 8.2-.8 11.2 1M7 12.6c3-.8 6.6-.5 9.2 1M7.6 15.6c2.4-.6 5-.3 7.2.8" fill="none" stroke="#0b0d1f" stroke-width="1.7" stroke-linecap="round"/></svg>Spotify</button>
+      <button id="mpYtm" class="hidden"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ff3b3b"/><circle cx="12" cy="12" r="6" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M10.4 9.6l4 2.4-4 2.4z" fill="#fff"/></svg>YouTube Music</button>
+      <button id="mpAud" class="hidden"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>Áudio do computador (música completa)</button>
+      <button id="mpYt" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="#ff3b3b" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="#fff"/></svg>YouTube</button>
+      <button id="mpFile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Arquivo</button>
+    </div>
+    <div id="mCtlBox">
+    <div class="mlbl">Quem pode controlar</div>
+    <label class="mrad"><input type="radio" name="mctl" value="me" checked> Só eu posso controlar</label>
+    <label class="mrad"><input type="radio" name="mctl" value="all"> Qualquer um pode controlar</label>
+    </div>
+    <div class="mlbl" id="mUrlLbl">Link</div>
+    <input id="mUrl" placeholder="https://youtube.com/watch?v=..." aria-label="Link" autocomplete="off">
+    <div class="merr hidden" id="mErr" role="alert"></div>
+    <div class="mlbl hidden" id="mSongLbl">Nome da música (opcional)</div>
+    <input id="mSong" class="hidden" maxlength="80" placeholder="Ex.: Anitta - Envolver" aria-label="Nome da música" autocomplete="off">
+    <div class="mhint hidden" id="mHint"></div>
+    <button class="mbtn" id="mAdd">Adicionar</button>
+  </div>
+</div>
 <div class="nmodal hidden" id="nModal" role="dialog" aria-modal="true" aria-labelledby="nTitle">
   <div class="ncard">
     <div class="nlogo"><span class="ico"><svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="1" y="1" width="16" height="10" rx="2"/><path d="M6 15h6"/></svg></span>Compartilha <small>AO VIVO</small></div>
@@ -220,6 +331,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       <div class="gh">Perfil</div>
       <div class="gn" id="gName"></div>
       <button id="btnChangeName" role="menuitem">Alterar nome</button>
+      <button id="btnSfx" role="menuitem">Sons: ligados</button>
     </div>
   </div>
 </header>
@@ -227,10 +339,18 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
 <div class="wrap">
   <div id="quotaWarn" class="warn hidden" role="alert"></div>
   <div class="main">
+    <aside class="col-left">
+      <div class="card">
+        <div class="phead"><div class="ctitle">Participantes</div><span class="pcount" id="pCount">0</span></div>
+        <div id="viewersList"><div class="empty">Ninguém na sala ainda.</div></div>
+      </div>
+    </aside>
+
     <section class="col-main">
       <div class="stat-top hidden" id="statTop"></div>
       <div class="vidstage hidden" id="vidStage">
-        <div class="vidbox"><div id="vidSlot"></div><button class="hidden" id="vidTap">▶ Toque para ver o vídeo</button></div>
+        <div class="vidbox"><div id="vidSlot"></div><button class="hidden" id="btnVidClear" aria-label="Remover da sala" title="Remover da sala">×</button><button class="hidden" id="vidTap">▶ Toque para ver o vídeo</button></div>
+        <div class="vidcap hidden" id="vidCap"><img id="vidCapImg" class="hidden" alt=""><span id="vidCapTxt"></span></div>
       </div>
       <div class="stage" id="stage">
         <div class="tiles n0" id="tiles"></div>
@@ -255,24 +375,21 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       <div class="hostrow">
         <span class="avatar">V</span>
         <div><div id="whoLine">Você não está transmitindo</div><div id="whoSub">Clique em Transmitir para criar uma sala</div></div>
-        <div class="acts">
-          <button class="pillbtn primary" id="btnStart2">Transmitir</button>
-          <button class="pillbtn" id="btnCreateRoom" title="Cria a sala sem compartilhar a tela. Você pode transmitir depois.">Criar sala</button>
-          <button class="pillbtn" id="btnCopyCode" disabled>Copiar código</button>
-          <button class="pillbtn" id="btnSwitch" disabled>Trocar tela</button>
-          <button class="pillbtn" id="btnHideMe" disabled title="Oculta só a sua pré-visualização. Quem assiste continua vendo (atalho: H)">Ocultar minha tela</button>
-          <button class="pillbtn danger" id="btnStop" disabled>Encerrar</button>
-        </div>
       </div>
 
-      <div class="chips">
-        <label class="chip"><span>Resolução</span><select id="selRes"><option value="480">480p</option><option value="720" selected>720p</option><option value="1080">1080p (Full HD)</option></select></label>
-        <label class="chip"><select id="selFps" aria-label="Fluidez"><option value="30">30 fps</option><option value="60" selected>60 fps</option></select></label>
-        <label class="chip"><select id="selMode" aria-label="Modo"><option value="auto">Modo Automático</option><option value="game" selected>Modo Jogo</option><option value="text">Modo Texto</option></select></label>
-        <label class="chip"><span>Encoder (Hardware)</span><select id="selHardware"><option value="auto">Automático</option><option value="gpu" selected>Placa de Vídeo (GPU / NVENC)</option><option value="cpu">Processador (CPU)</option></select></label>
-        <label class="chip"><span>Limite via servidor</span><select id="selRelay"><option value="2000">2 Mbps</option><option value="3000">3 Mbps</option><option value="4000" selected>4 Mbps</option><option value="6000">6 Mbps</option><option value="10000">10 Mbps</option><option value="0">Sem limite</option></select></label>
-        <label class="chip"><span>Áudio</span><select id="selAudio" title="Só da janela: precisa de Chrome, Edge ou Brave atualizados. No seletor do navegador escolha Janela e ligue a opção de áudio."><option value="window" selected>Só da janela</option><option value="system">Do sistema (tudo)</option><option value="none">Sem áudio</option></select></label>
+      <div class="dock" id="dock">
+        <button class="pillbtn primary" id="btnStart2">Transmitir</button>
+        <button class="pillbtn" id="btnAddScreen" disabled title="Compartilha mais uma tela ao mesmo tempo (até 4 telas)">+ Outra tela</button>
+        <button class="pillbtn hidden" id="btnDelScreen" title="Para de compartilhar a última tela extra">Tirar tela extra</button>
+        <button class="pillbtn" id="btnMusicFocus" title="Colocar música na sala">🎵 Música</button>
+        <button class="pillbtn" id="btnVideoFocus" title="Colocar um vídeo por link na sala">▶ Vídeo</button>
+        <button class="pillbtn" id="btnCreateRoom" title="Cria a sala sem compartilhar a tela. Você pode transmitir depois.">Criar sala</button>
+        <button class="pillbtn" id="btnCopyCode" disabled>Copiar código</button>
+        <button class="pillbtn" id="btnSwitch" disabled>Trocar tela</button>
+        <button class="pillbtn" id="btnHideMe" disabled title="Oculta só a sua pré-visualização. Quem assiste continua vendo (atalho: H)">Ocultar minha tela</button>
+        <button class="pillbtn danger" id="btnStop" disabled>Encerrar</button>
       </div>
+
     </section>
 
     <aside class="col-side">
@@ -286,21 +403,17 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
         <button class="linkbtn hidden" id="btnCopyLink">Copiar link direto</button>
       </div>
 
-      <div class="card">
-        <div class="ctitle">Vídeo para a sala</div>
-        <div class="lbl">Cole o link de um vídeo (YouTube ou arquivo .mp4 / .webm)</div>
-        <div class="row">
-          <input id="vidUrl" placeholder="https://..." aria-label="Link do vídeo" autocomplete="off">
-          <button id="btnVidLoad">Colocar</button>
+      <details class="card">
+        <summary class="ctitle">Qualidade e áudio da transmissão</summary>
+        <div class="qset">
+        <label class="srow"><span>Resolução</span><select id="selRes" aria-label="Resolução"><option value="480">480p</option><option value="720" selected>720p</option><option value="1080">1080p (Full HD)</option></select></label>
+        <label class="srow"><span>Fluidez</span><select id="selFps" aria-label="Fluidez"><option value="30">30 fps</option><option value="60" selected>60 fps</option></select></label>
+        <label class="srow"><span>Modo</span><select id="selMode" aria-label="Modo"><option value="auto">Automático</option><option value="game" selected>Jogo</option><option value="text">Texto</option></select></label>
+        <label class="srow"><span>Encoder (hardware)</span><select id="selHardware" aria-label="Encoder"><option value="auto">Automático</option><option value="gpu" selected>Placa de vídeo (GPU / NVENC)</option><option value="cpu">Processador (CPU)</option></select></label>
+        <label class="srow"><span>Limite via servidor</span><select id="selRelay" aria-label="Limite via servidor"><option value="2000">2 Mbps</option><option value="3000">3 Mbps</option><option value="4000" selected>4 Mbps</option><option value="6000">6 Mbps</option><option value="10000">10 Mbps</option><option value="0">Sem limite</option></select></label>
+        <label class="srow"><span>Áudio</span><select id="selAudio" aria-label="Áudio" title="Só da janela: precisa de Chrome, Edge ou Brave atualizados. No seletor do navegador escolha Janela e ligue a opção de áudio."><option value="window" selected>Só da janela</option><option value="system">Do sistema (tudo)</option><option value="none">Sem áudio</option></select></label>
         </div>
-        <button class="linkbtn hidden" id="btnVidClear">Remover vídeo da sala</button>
-        <div class="lbl" style="margin:10px 0 0">Todo mundo na sala vê junto: play, pausa e avanço ficam sincronizados.</div>
-      </div>
-
-      <div class="card">
-        <div class="ctitle">Quem está assistindo</div>
-        <div id="viewersList"><div class="empty">Ninguém assistindo ainda.</div></div>
-      </div>
+      </details>
 
       <div class="card compat">
         <b>Compatibilidade:</b> use um navegador atualizado e abra o site por HTTPS. O navegador sempre pede autorização antes de capturar a tela.
@@ -322,7 +435,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   var $ = function(id){return document.getElementById(id)};
   var peer = null, stream = null, calls = [], conns = [], active = false, gotStream = false, joinTimer = null;
   var roomCode = "", isCreator = false, myId = "", creatorId = "", myName = "Você", creatorOpen = false;
-  var members = {}, incoming = {}, tiles = {}, names = {};
+  var members = {}, incoming = {}, tiles = {}, names = {}, extras = [], musicEx = null, musicIn = {}, musicVol = 1, musicMuted = false, musMeta = {}, musTok = 0;
+  function isMe(k){ return k==="me"||String(k).indexOf("me~")===0; }
   var viewConn = null, statsTimer = null, lastDiag = "";
   var idlePaused = false, lastAct = Date.now(), userMuted = false, forcedMute = false, userPaused = false, joining = false, starting = false;
   var hostStatsTimer = null, wakeLock = null, reconnects = 0, everLive = false, relayUsed = 0, totalUsed = 0;
@@ -619,6 +733,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function tuneCall(c){
     var pc=c&&c.peerConnection; if(!pc) return;
     var q=qual(), kbps=q.kbps;
+    if(c._slot>1&&c._slot!==9) kbps=Math.round(kbps*0.6);
     c._kbps=kbps;
     pc.getSenders().forEach(function(sn){
       if(!sn.track||sn.track.kind!=="video") return;
@@ -746,6 +861,36 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok,ok); else ok();
   }
   var nick="", nicks={}, pendingJoin=null;
+  var sfxOn=true, actx=null, sfxLast={};
+  try{ sfxOn=localStorage.getItem("telaja_sfx")!=="0"; }catch(e){}
+  function sfxCtx(){
+    try{
+      if(!actx){ var C=window.AudioContext||window.webkitAudioContext; if(C) actx=new C(); }
+      if(actx&&actx.state==="suspended") actx.resume();
+    }catch(e){}
+    return actx;
+  }
+  function sfxTone(c,f0,f1,t0,dur,vol){
+    try{
+      var o=c.createOscillator(), g=c.createGain();
+      o.type="sine"; o.frequency.setValueAtTime(f0,t0); if(f1!==f0) o.frequency.linearRampToValueAtTime(f1,t0+dur);
+      g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(vol,t0+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+      o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0+dur+0.03);
+    }catch(e){}
+  }
+  function sfx(kind){
+    if(!sfxOn) return;
+    var now=Date.now(); if(sfxLast[kind] && now-sfxLast[kind]<700) return; sfxLast[kind]=now;
+    var c=sfxCtx(); if(!c) return;
+    var t=c.currentTime+0.02;
+    if(kind==="join"){ sfxTone(c,520,520,t,0.12,0.12); sfxTone(c,780,780,t+0.12,0.18,0.12); }
+    else if(kind==="leave"){ sfxTone(c,700,700,t,0.12,0.12); sfxTone(c,430,430,t+0.12,0.2,0.12); }
+    else if(kind==="share"){ sfxTone(c,440,660,t,0.14,0.12); sfxTone(c,660,990,t+0.14,0.2,0.12); }
+    else if(kind==="unshare"){ sfxTone(c,880,520,t,0.16,0.12); sfxTone(c,520,330,t+0.16,0.2,0.12); }
+  }
+  ["click","keydown","touchstart"].forEach(function(ev){ document.addEventListener(ev,function(){ sfxCtx(); },{once:true,passive:true}); });
+  function labelOf(k){ var a=String(k).split("~"); return nameOf(a[0])+(a[1]?" · tela "+a[1]:""); }
+  function hasIncoming(id){ return Object.keys(incoming).some(function(k){ return k===id||k.indexOf(id+"~")===0; }); }
   function slotOf(id){ return names[id] || (members[id]&&members[id].name) || ""; }
   function nameOf(id){ return nicks[id] || slotOf(id) || "Pessoa"; }
   function nickClean(v){ return String(v||"").replace(/[\u0000-\u001f\u007f<>]/g,"").replace(/\s+/g," ").trim().slice(0,20); }
@@ -773,7 +918,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function nickOnMsg(d,id){
     var v=nickClean(d.nick); if(!v) return;
     nicks[id]=v;
-    if(tiles[id]) tiles[id].tagText.textContent=v;
+    Object.keys(tiles).forEach(function(k){ if(k===id||k.indexOf(id+"~")===0) tiles[k].tagText.textContent=labelOf(k); });
     renderAll();
   }
   function nickSave(){
@@ -826,16 +971,16 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function layout() {
     var all = Object.keys(tiles);
     var visible = all.filter(function(k) { return !(k === "me" && localTileHidden); });
-    var remoteKeys = visible.filter(function(k) { return k !== "me"; });
+    var remoteKeys = visible.filter(function(k) { return !isMe(k); });
     var remoteCount = remoteKeys.length;
 
     if (!stream) localTileHidden = false;
 
     var box = $("tiles");
     
-    if (stream && remoteCount > 0 && !localTileHidden) {
+    if (stream && remoteCount > 0 && !localTileHidden && visible.length <= 2) {
       box.className = "tiles has-local-remote";
-    } else if (remoteCount === 2) {
+    } else if (remoteCount === 2 && !visible.some(function(k){ return k.indexOf("me~")===0; })) {
       box.className = "tiles n2";
     } else {
       var n = visible.length;
@@ -879,7 +1024,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var v = document.createElement("video");
     v.autoplay = true;
     v.playsInline = true;
-    if (key === "me") v.muted = true;
+    if (isMe(key)) v.muted = true;
     
     v.ondblclick = function(e) {
       e.stopPropagation();
@@ -929,7 +1074,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     };
     tag.appendChild(pauseBtn);
 
-    if (key !== "me") {
+    if (!isMe(key)) {
       var vol = document.createElement("input");
       vol.type = "range";
       vol.min = "0";
@@ -1003,10 +1148,11 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     layout();
   }
   function liveIncoming(){
-    return Object.keys(tiles).filter(function(k){ return k!=="me" && tiles[k].video.videoWidth>0; }).length;
+    return Object.keys(tiles).filter(function(k){ return !isMe(k) && tiles[k].video.videoWidth>0; }).length;
   }
 
   function renderHeader(){
+    var pc=$("pCount"); if(pc) pc.textContent=active?(nMembers()+1):0;
     var live = !!stream || Object.keys(incoming).length>0, n=nMembers();
     $("stageTitle").textContent = !active ? "Compartilhe sua tela" : "Sessão "+roomCode+" · "+(live?"transmissão ao vivo":"aguardando transmissão");
     var a=$("whoLine"), b=$("whoSub");
@@ -1027,7 +1173,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     }
     ids.forEach(function(id){
       var row=document.createElement("div"); row.className="vrow";
-      var l=document.createElement("span"); l.textContent=nameOf(id)+(id===creatorId&&!isCreator?" · host":"")+(incoming[id]?" · transmitindo":"");
+      var l=document.createElement("span"); l.textContent=nameOf(id)+(id===creatorId&&!isCreator?" · host":"")+(hasIncoming(id)?" · transmitindo":"");
       var r=document.createElement("span"); r.className="vkind";
       var out=calls.filter(function(x){ return x.peer===id; })[0], inc=incoming[id];
       var known=(out&&out._known)||(inc&&inc._known), relay=(out&&out._relay)||(inc&&inc._relay);
@@ -1051,7 +1197,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     rows.forEach(function(x){ box.appendChild(x.row); });
     if(!ids.length){
       var e=document.createElement("div"); e.className="empty";
-      e.textContent=active?"Ninguém mais na sala por enquanto.":"Ninguém assistindo ainda.";
+      e.textContent=active?"Ninguém mais na sala por enquanto.":"Ninguém na sala ainda.";
       box.appendChild(e);
     }
   }
@@ -1071,6 +1217,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
 
     $("btnCreateRoom").classList.toggle("hidden", active);
     $("btnSwitch").disabled = !sharing;
+    $("btnAddScreen").disabled = !(sharing && !camMode && extras.filter(function(e){ return !e.music; }).length<3 && navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+    $("btnDelScreen").classList.toggle("hidden", !extras.some(function(e){ return !e.music; }));
     $("btnSwitch").textContent = camMode ? "Trocar câmera" : "Trocar tela";
     updateHideBtn();
     $("btnStop").disabled = !active;
@@ -1095,6 +1243,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     conns.forEach(function(c){try{c.close()}catch(e){}});
     calls=[]; conns=[]; incoming={}; members={}; names={}; localTileHidden=false;
     if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
+    extras.forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){} }); extras=[]; musicEx=null;
+    Object.keys(musicIn).forEach(dropMusic);
     camMode=false;
     Object.keys(tiles).forEach(function(k){ removeTile(k); });
     gotStream=false; idlePaused=false; $("playBtn").textContent="▶ Toque para ver a tela"; $("playBtn").classList.add("hidden");
@@ -1104,7 +1254,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.29-g", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.30-i", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
@@ -1225,7 +1375,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     camMode=cam;
     if(!cam) await addDeviceAudio(st);
     hintTrack(st); stream=st; starting=false; keepAwake(true); presence(false);
-    bindEnded(st);
+    bindEnded(st); sfx("share");
     if(active){
       getTile("me","Você").video.srcObject=stream;
       Object.keys(members).forEach(function(id){ callMember(id); });
@@ -1250,9 +1400,11 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   function stopShare(msg){
     setTimeout(function(){ presence(false); },0);
-    if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
+    if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; sfx("unshare"); }
     camMode=false;
-    calls.forEach(function(c){try{c.close()}catch(e){}}); calls=[];
+    extras.filter(function(e){ return !e.music; }).forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){} removeTile("me~"+ex.slot); });
+    extras=extras.filter(function(e){ return e.music; });
+    calls=calls.filter(function(c){ if(c._slot===9) return true; try{c.close()}catch(e){} return false; });
     localTileHidden=false;
     removeTile("me");
     if(liveIncoming()===0) setStatus("Na sala",false);
@@ -1260,8 +1412,9 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(msg) setMsg(msg);
   }
   function callMember(id){
-    if(!stream||!peer) return;
+    if(!peer||(!stream&&!extras.length)) return;
     calls=calls.filter(function(c){ if(c.peer===id){ try{c.close()}catch(e){} return false; } return true; });
+    if(!stream){ extras.forEach(function(ex){ callExtra(id,ex); }); return; }
     var c=peer.call(id,stream,{sdpTransform:hostSdp});
     calls.push(c);
     var pc0=c.peerConnection, rt=null;
@@ -1280,6 +1433,190 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     });
     watchIce(c,function(){ if(c._known) return; setMsg("Não foi possível conectar com "+nameOf(id)+" (a rede dela bloqueou a conexão). Peça para tentar de novo ou usar outra rede.",true); });
     c.on("close",function(){ calls=calls.filter(function(x){ return x!==c; }); renderMembers(); });
+    extras.forEach(function(ex){ callExtra(id,ex); });
+  }
+  function callExtra(id,ex){
+    if(!peer||!ex||!ex.stream) return;
+    var c=peer.call(id,ex.stream,{sdpTransform:hostSdp,metadata:{slot:ex.slot,music:!!ex.music}});
+    if(!c) return;
+    c._slot=ex.slot; calls.push(c);
+    var pc0=c.peerConnection;
+    if(pc0) pc0.addEventListener("iceconnectionstatechange",function(){
+      var st=pc0.iceConnectionState; if(st==="connected"||st==="completed") tuneCall(c);
+    });
+    c.on("close",function(){ calls=calls.filter(function(x){ return x!==c; }); renderMembers(); });
+  }
+  try{
+    var mv=parseFloat(localStorage.getItem("telaja_musvol")); if(isFinite(mv)) musicVol=Math.max(0,Math.min(1,mv));
+    musicMuted=localStorage.getItem("telaja_musmute")==="1";
+  }catch(e){}
+  function musApply(){
+    Object.keys(musicIn).forEach(function(k){
+      var a=musicIn[k].audio; if(a){ a.volume=musicVol; a.muted=musicMuted||userMuted; }
+    });
+    var off=musicMuted||musicVol===0;
+    $("btnMusMute").textContent=off?"🔇":(musicVol<0.5?"🔉":"🔊");
+    $("btnMusMute").title=off?"Ativar o som da música":"Silenciar";
+    $("musVol").value=musicMuted?0:musicVol;
+    $("musPct").textContent=Math.round((musicMuted?0:musicVol)*100)+"%";
+  }
+  function musBadgeUpdate(){
+    var b=$("musBadge"), t=$("musText");
+    var ks=Object.keys(musicIn), nm=ks.map(nameOf).join(", ");
+    var blocked=ks.some(function(k){ return musicIn[k].blocked; });
+    if(!musicEx&&!ks.length){ b.classList.add("hidden"); document.body.classList.remove("has-badge"); return; }
+    var meta=musicEx ? musMeta.me : (ks.length ? musMeta[ks[0]] : null);
+    t.textContent=musicEx ? "🎵 Você está compartilhando" : (meta&&meta.artist ? meta.artist+" · " : "")+"🎵 Música de "+nm;
+    $("musTitle").classList.toggle("hidden",!meta);
+    if(meta) $("musTitle").textContent=meta.title;
+    var cv=$("musCover");
+    if(meta&&meta.img){ if(cv.getAttribute("src")!==meta.img) cv.src=meta.img; cv.classList.remove("hidden"); } else cv.classList.add("hidden");
+    b.classList.toggle("has-title",!!meta);
+    $("musEdit").classList.toggle("hidden",!musicEx);
+    $("musListen").classList.toggle("hidden",!ks.length);
+    $("btnMusPlay").classList.toggle("hidden",!blocked);
+    $("musNote").classList.toggle("hidden",!musicEx);
+    $("btnMusStop").classList.toggle("hidden",!musicEx);
+    b.classList.remove("hidden");
+    musApply();
+    document.body.classList.add("has-badge");
+    document.documentElement.style.setProperty("--badgeh",(b.offsetHeight+28)+"px");
+  }
+  function dropMusic(pid){
+    var r=musicIn[pid]; if(!r) return;
+    delete musicIn[pid]; delete musMeta[pid];
+    try{ r.call.close(); }catch(e){}
+    if(r.audio){ try{ r.audio.pause(); r.audio.srcObject=null; }catch(e){} }
+    musBadgeUpdate();
+  }
+  function onMusicCall(call){
+    var pid=call.peer, old=musicIn[pid];
+    if(old){ try{ old.call.close(); }catch(e){} if(old.audio){ try{ old.audio.srcObject=null; }catch(e){} } }
+    var rec={call:call,audio:old?old.audio:null,blocked:false}; musicIn[pid]=rec;
+    call.on("stream",function(remote){
+      if(musicIn[pid]!==rec) return;
+      var a=rec.audio||new Audio(); rec.audio=a;
+      a.autoplay=true; a.srcObject=remote; a.volume=musicVol; a.muted=musicMuted||userMuted;
+      var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ rec.blocked=true; musBadgeUpdate(); });
+      sfx("share"); setMsg(nameOf(pid)+" está compartilhando música."); musBadgeUpdate();
+    });
+    call.on("close",function(){
+      if(musicIn[pid]!==rec) return;
+      dropMusic(pid);
+      if(active) setMsg("A música de "+nameOf(pid)+" parou.");
+    });
+  }
+  var MUS_IMG_OK=/^https:\/\/(i\.ytimg\.com|i\.scdn\.co|[a-z0-9-]+\.mzstatic\.com)\//;
+  function musMetaClean(d){
+    var t=String((d&&d.title)||"").replace(/[\u0000-\u001f<>]/g,"").trim().slice(0,90);
+    var a=String((d&&d.artist)||"").replace(/[\u0000-\u001f<>]/g,"").trim().slice(0,70);
+    var img=String((d&&d.img)||""); if(img.length>300||!MUS_IMG_OK.test(img)) img="";
+    return t ? {title:t,artist:a,img:img} : null;
+  }
+  function musSend(){ var m=musMeta.me; if(m) sendAll({t:"mus",title:m.title,artist:m.artist,img:m.img}); }
+  function musSendMeta(conn){ var m=musMeta.me; if(musicEx&&m){ try{ conn.send({t:"mus",title:m.title,artist:m.artist,img:m.img}); }catch(e){} } }
+  async function musLookup(q){
+    try{
+      var r=await fetch("https://itunes.apple.com/search?media=music&entity=song&limit=1&term="+encodeURIComponent(q));
+      var j=await r.json(), it=j&&j.results&&j.results[0]; if(!it) return null;
+      return {title:it.trackName,artist:it.artistName,img:String(it.artworkUrl100||"").replace(/\/\d+x\d+bb\./,"/300x300bb.")};
+    }catch(e){ return null; }
+  }
+  function musSetMine(q){
+    q=String(q||"").replace(/[\u0000-\u001f<>]/g,"").trim().slice(0,80);
+    if(!q||!musicEx) return;
+    var ex=musicEx, tok=++musTok;
+    musMeta.me={title:q,artist:"",img:""}; musSend(); musBadgeUpdate();
+    musLookup(q).then(function(m){
+      m=m&&musMetaClean(m);
+      if(m&&tok===musTok&&musicEx===ex){ musMeta.me=m; musSend(); musBadgeUpdate(); }
+    });
+  }
+  $("btnMusSong").onclick=function(){ musSetMine($("musSong").value); $("musSong").value=""; };
+  $("musSong").addEventListener("keydown",function(e){ if(e.key==="Enter") $("btnMusSong").click(); });
+  $("musCover").onerror=function(){ this.classList.add("hidden"); };
+  async function shareMusicAudio(song){
+    if(!active){ setMsg("Crie uma sala (Transmitir ou Criar sala) ou entre em uma antes de compartilhar música.",true); return false; }
+    if(musicEx){ setMsg("Você já está compartilhando áudio. Pare antes de iniciar outro.",true); return false; }
+    if(!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia)){ setMsg("Este navegador não permite compartilhar o áudio do computador.",true); return false; }
+    var ns;
+    try{
+      ns=await navigator.mediaDevices.getDisplayMedia({video:true,audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},systemAudio:"include",selfBrowserSurface:"exclude"});
+    }catch(e){ setMsg("Nenhum áudio foi compartilhado."); return false; }
+    var at=ns.getAudioTracks();
+    if(!at.length){
+      ns.getTracks().forEach(function(t){t.stop()});
+      setMsg("A tela foi escolhida, mas sem áudio. Tente de novo, escolha uma guia (ou a tela inteira) e marque \"Compartilhar áudio\".",true);
+      return false;
+    }
+    if(!active){ ns.getTracks().forEach(function(t){t.stop()}); return false; }
+    var ex={slot:9,stream:new MediaStream(at),src:ns,music:true};
+    extras.push(ex); musicEx=ex;
+    var end=function(){ removeExtra(ex,"O compartilhamento de áudio terminou."); };
+    var vt=ns.getVideoTracks()[0]; if(vt) vt.addEventListener("ended",end);
+    at[0].addEventListener("ended",end);
+    Object.keys(members).forEach(function(id){ callExtra(id,ex); });
+    sfx("share"); musBadgeUpdate();
+    if(song) musSetMine(song);
+    setMsg("Áudio compartilhado. Todo mundo ouve, completo, o que estiver tocando ali.");
+    return true;
+  }
+  $("btnMusStop").onclick=function(e){ e.stopPropagation(); if(musicEx) removeExtra(musicEx,"Compartilhamento de música parado."); };
+  $("btnMusPlay").onclick=function(){
+    Object.keys(musicIn).forEach(function(k){
+      var r=musicIn[k]; r.blocked=false;
+      if(r.audio){ var pr=r.audio.play(); if(pr&&pr.catch) pr.catch(function(){ r.blocked=true; musBadgeUpdate(); }); }
+    });
+    musBadgeUpdate();
+  };
+  $("musVol").addEventListener("input",function(){
+    musicVol=+this.value; musicMuted=false;
+    try{ localStorage.setItem("telaja_musvol",String(musicVol)); localStorage.setItem("telaja_musmute","0"); }catch(e){}
+    musApply();
+  });
+  $("btnMusMute").onclick=function(){
+    musicMuted=!musicMuted;
+    if(!musicMuted&&musicVol===0) musicVol=0.5;
+    try{ localStorage.setItem("telaja_musmute",musicMuted?"1":"0"); localStorage.setItem("telaja_musvol",String(musicVol)); }catch(e){}
+    musApply();
+  };
+  $("btnMusMin").onclick=function(){
+    var b=$("musBadge"), mn=b.classList.toggle("min");
+    this.textContent=mn?"+":"–"; this.title=mn?"Expandir":"Minimizar"; this.setAttribute("aria-label",this.title);
+    document.documentElement.style.setProperty("--badgeh",(b.offsetHeight+28)+"px");
+  };
+  var addingScreen=false;
+  async function addScreen(){
+    if(addingScreen) return;
+    if(!active||!stream||camMode) return setMsg("Comece a transmitir uma tela antes de adicionar outra.",true);
+    if(!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia)) return setMsg("Este navegador não permite compartilhar mais de uma tela.",true);
+    if(extras.filter(function(e){ return !e.music; }).length>=3) return setMsg("Você já está com 4 telas ao mesmo tempo. Esse é o limite.",true);
+    var ns;
+    addingScreen=true;
+    try{ ns=await navigator.mediaDevices.getDisplayMedia(capConstraints()); }
+    catch(e){ addingScreen=false; return setMsg("Nenhuma tela nova foi escolhida."); }
+    addingScreen=false;
+    if(!active||!stream){ ns.getTracks().forEach(function(t){t.stop()}); return; }
+    hintTrack(ns);
+    var used={}; extras.forEach(function(e){ used[e.slot]=1; });
+    var slot=2; while(used[slot]) slot++;
+    var ex={slot:slot,stream:ns}; extras.push(ex);
+    var t=getTile("me~"+slot,"Você · tela "+slot); t.video.srcObject=ns; t.video.muted=true;
+    Object.keys(members).forEach(function(id){ callExtra(id,ex); });
+    var vt=ns.getVideoTracks()[0];
+    if(vt) vt.addEventListener("ended",function(){ removeExtra(ex,"A tela "+slot+" parou de ser compartilhada."); });
+    sfx("share"); renderAll();
+    setMsg("Tela "+slot+" adicionada. Quem está na sala vê as telas ao mesmo tempo. Cada tela extra usa mais internet.");
+  }
+  function removeExtra(ex,msg){
+    if(extras.indexOf(ex)<0) return;
+    extras=extras.filter(function(x){ return x!==ex; });
+    try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){}
+    try{ if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){}
+    if(ex.music){ musicEx=null; delete musMeta.me; musBadgeUpdate(); }
+    calls=calls.filter(function(c){ if(c._slot===ex.slot){ try{c.close()}catch(e){} return false; } return true; });
+    removeTile("me~"+ex.slot); sfx("unshare"); renderAll();
+    if(msg) setMsg(msg);
   }
   async function switchScreen(){
     if(!active||!stream) return;
@@ -1421,7 +1758,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       if(!active) return;
       var id=conn.peer, m=members[id]||(members[id]={id:id});
       m.conn=conn;
-      vidSendState(conn); nickSend(conn);
+      vidSendState(conn); nickSend(conn); musSendMeta(conn); sfx("join");
       if(isCreator && !outgoing){
         m.name=names[id]||(names[id]=nextName()); names[id]=m.name;
         var list=[{id:myId,name:myName}];
@@ -1431,7 +1768,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       }else if(!isCreator && outgoing && id!==creatorId){
         try{ conn.send({t:"hi",name:myName}); }catch(e){}
       }
-      if(stream) callMember(id);
+      if(stream||extras.length) callMember(id);
       renderAll(); updateHostStatus();
     });
     conn.on("data",function(d){ onData(conn,d); });
@@ -1451,6 +1788,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           wireConn(peer.connect(e.id),true);
         });
         renderAll();
+      }else if(d.t==="mus"){
+        var mm=musMetaClean(d); if(mm){ musMeta[id]=mm; musBadgeUpdate(); }
       }else if(d.t==="nick"){
         nickOnMsg(d,id);
       }else if(d.t==="vid"){
@@ -1460,7 +1799,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       }
       return;
     }
-    if(d==="retry"){ if(stream) callMember(id); }
+    if(d==="retry"){ if(stream||extras.length) callMember(id); }
     else if(d==="pause"||d==="resume"){
       calls.forEach(function(c){ if(c.peer===id){ c._paused=(d==="pause"); tuneCall(c); } });
     }
@@ -1538,7 +1877,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     calls=calls.filter(function(c){ if(c.peer===id){ try{c.close()}catch(e){} return false; } return true; });
     dropIncoming(id,true);
 
-    delete names[id]; delete nicks[id];
+    delete names[id]; delete nicks[id]; sfx("leave");
+    if(vid&&vid.owner===id&&vid.ctl==='me'){ vid.ctl='all'; $("vidSlot").classList.remove("locked"); $("btnVidClear").classList.remove("hidden"); }
     if(active) setMsg(nm+(kicked?" foi removida da sala.":" saiu da sala."));
     renderAll(); updateHostStatus();
 
@@ -1551,15 +1891,24 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     }
   }
 
-  function dropIncoming(id,silent){
-    var call=incoming[id]; delete incoming[id];
+  function dropKey(k){
+    var call=incoming[k]; delete incoming[k];
     if(call){ try{call.close()}catch(e){} }
+    removeTile(k);
+  }
+  function dropIncoming(id,silent){
+    dropMusic(id);
+    Object.keys(incoming).filter(function(k){ return k===id||k.indexOf(id+"~")===0; }).forEach(dropKey);
     removeTile(id);
     if(!silent) renderAll();
   }
   function onCall(call){
     call.answer(undefined,{sdpTransform:sdpBoost});
-    var id=call.peer, pcv=call.peerConnection, vt=null;
+    var pid=call.peer, slot=0;
+    try{ slot=Math.max(0,Math.min(9,(+(call.metadata&&call.metadata.slot))|0)); }catch(e){}
+    if(slot===9){ onMusicCall(call); return; }
+    var id=slot>1 ? pid+"~"+slot : pid;
+    var pcv=call.peerConnection, vt=null;
     incoming[id]=call;
     if(pcv) pcv.addEventListener("iceconnectionstatechange",function(){
       var st=pcv.iceConnectionState, down=(st==="disconnected"||st==="failed");
@@ -1569,22 +1918,23 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       else if(down){
         clearTimeout(vt);
         vt=setTimeout(function(){
-          if(incoming[id]===call && !/^(connected|completed)$/.test(pcv.iceConnectionState)) sendTo(id,"retry");
+          if(incoming[id]===call && !/^(connected|completed)$/.test(pcv.iceConnectionState)) sendTo(pid,"retry");
         }, st==="failed"?1000:6000);
       }
     });
     watchIce(call,function(){
       if(incoming[id]!==call||call._known) return;
-      dropIncoming(id);
-      setMsg("A conexão com "+nameOf(id)+" foi bloqueada pela rede. Tente em outra rede ou peça para a outra pessoa tentar de novo.",true);
+      dropKey(id); renderAll();
+      setMsg("A conexão com "+nameOf(pid)+" foi bloqueada pela rede. Tente em outra rede ou peça para a outra pessoa tentar de novo.",true);
     });
     call.on("stream",function(remote){
-      var t=getTile(id,nameOf(id)), v=t.video;
+      var t=getTile(id,labelOf(id)), v=t.video;
       if(v.srcObject===remote) return;
       gotStream=true; everLive=true; clearTimeout(joinTimer);
       v.srcObject=remote; v.volume=userVol; v.muted=userMuted||forcedMute;
       tryPlay(v);
-      setStatus("Assistindo ao vivo",true); setMsg("Você está assistindo à tela de "+nameOf(id)+".");
+      if(!call._sfx){ call._sfx=1; sfx("share"); }
+      setStatus("Assistindo ao vivo",true); setMsg("Você está assistindo à tela de "+labelOf(id)+".");
       watchFrames(id,v);
       startStats();
       applyBuffer(); setTimeout(applyBuffer,1000); setTimeout(applyBuffer,4000);
@@ -1593,7 +1943,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     call.on("close",function(){
       if(incoming[id]!==call) return;
       delete incoming[id]; removeTile(id);
-      if(active){ setMsg(nameOf(id)+" parou de transmitir."); if(!stream&&liveIncoming()===0) setStatus("Na sala",false); renderAll(); }
+      if(active){ sfx("unshare"); setMsg(labelOf(id)+" parou de transmitir."); if(!stream&&liveIncoming()===0) setStatus("Na sala",false); renderAll(); }
     });
     renderAll();
   }
@@ -1663,19 +2013,19 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var tries=0, retried=false;
     var t=setInterval(function(){
       if(!active||!incoming[id]||!tiles[id]){ clearInterval(t); return; }
-      if(v.videoWidth>0){ clearInterval(t); reconnects=0; setMsg("Você está assistindo à tela de "+nameOf(id)+"."); return; }
+      if(v.videoWidth>0){ clearInterval(t); reconnects=0; setMsg("Você está assistindo à tela de "+labelOf(id)+"."); return; }
       tries++;
       if(tries<=40) setMsg("Aguardando a imagem… ("+(lastDiag||"conectando")+"). Isso pode levar alguns segundos.");
-      if(tries===15&&!retried){ retried=true; sendTo(id,"retry"); }
+      if(tries===15&&!retried){ retried=true; sendTo(String(id).split("~")[0],"retry"); }
       if(tries===40){
         clearInterval(t);
-        setMsg("A imagem não chegou ("+(lastDiag||"sem conexão")+"). Clique em Encerrar e entre de novo, ou peça para "+nameOf(id)+" clicar em Trocar tela.",true);
+        setMsg("A imagem não chegou ("+(lastDiag||"sem conexão")+"). Clique em Encerrar e entre de novo, ou peça para "+labelOf(id)+" clicar em Trocar tela.",true);
       }
     },1000);
   }
   function remoteVideos(){
     return Object.keys(tiles).filter(function(k){
-      return k!=="me" && tiles[k] && tiles[k].video && tiles[k].video.srcObject!==stream;
+      return !isMe(k) && tiles[k] && tiles[k].video && tiles[k].video.srcObject!==stream;
     }).map(function(k){ return tiles[k].video; });
   }
   $("playBtn").onclick=function(){
@@ -1709,6 +2059,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   var userVol = 1;
   function applyVol(){
     remoteVideos().forEach(function(v){ v.volume=userVol; v.muted=userMuted; });
+    musApply();
     $("btnMute").classList.toggle("off",userMuted);
     $("volSlider").style.setProperty("--v",(+$("volSlider").value*100)+"%");
   }
@@ -1802,6 +2153,16 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   $("btnStart2").onclick=startClick;
   $("btnCreateRoom").onclick=createRoomOnly;
+  $("btnAddScreen").onclick=addScreen;
+  $("btnDelScreen").onclick=function(){ var sc=extras.filter(function(e){ return !e.music; }), ex=sc[sc.length-1]; if(ex) removeExtra(ex,"Tela "+ex.slot+" removida."); };
+  $("btnMusicFocus").onclick=function(){ mediaOpen(true); };
+  $("btnVideoFocus").onclick=function(){ mediaOpen(false); };
+  $("btnSfx").textContent=sfxOn?"Sons: ligados":"Sons: desligados";
+  $("btnSfx").onclick=function(){
+    sfxOn=!sfxOn; try{ localStorage.setItem("telaja_sfx",sfxOn?"1":"0"); }catch(e){}
+    this.textContent=sfxOn?"Sons: ligados":"Sons: desligados";
+    if(sfxOn) sfx("join");
+  };
   $("btnStop").onclick=function(){ end("", isCreator ? "Sala encerrada." : "Você saiu da sala."); };
   function copyCode(){ copy(roomCode,this); }
   $("btnCopy").onclick=copyCode; $("btnCopyCode").onclick=copyCode;
@@ -1817,9 +2178,25 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
 
   // ===== Vídeo compartilhado na sala =====
   var vid=null, vidEl=null, ytPlayer=null, ytReady=false, ytLoading=false, ytCbs=[], vidIgnoreUntil=0, vidSyncTimer=null, vidCtl=false, vidWant=false, vidTapTimer=null, vidPendingState=null;
+  var spApi=null, spLoading=false, spCbs=[], spCtl=null, spReady=false, spState={paused:true,pos:0,at:0};
+  function spNow(){ return spState.paused ? spState.pos : spState.pos+(Date.now()-spState.at)/1000; }
+  function spLoad(cb){
+    if(spApi){ cb(); return; }
+    spCbs.push(cb);
+    if(spLoading) return;
+    spLoading=true;
+    window.onSpotifyIframeApiReady=function(api){ spApi=api; spCbs.splice(0).forEach(function(f){ try{f()}catch(e){} }); };
+    var sc=document.createElement("script"); sc.src="https://open.spotify.com/embed/iframe-api/v1"; sc.async=true;
+    sc.onerror=function(){ spLoading=false; spCbs=[]; setMsg("Não consegui carregar o player do Spotify. Verifique a conexão ou bloqueadores de anúncio.",true); };
+    document.head.appendChild(sc);
+  }
   function vidIgnore(ms){ vidIgnoreUntil=Date.now()+(ms||900); }
   function vidIsIgn(){ return Date.now()<vidIgnoreUntil; }
   function vidClean(url,kind,ytId){
+    if(kind==="sp"){
+      var sm=/^(track|episode|album|playlist|show):([A-Za-z0-9]{22})$/.exec(ytId||"");
+      return sm ? {kind:"sp",ytId:ytId,url:"https://open.spotify.com/"+sm[1]+"/"+sm[2]} : null;
+    }
     if(kind==="yt"){
       return /^[\w-]{11}$/.test(ytId||"") ? {kind:"yt",ytId:ytId,url:"https://www.youtube.com/watch?v="+ytId} : null;
     }
@@ -1836,12 +2213,17 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       if(u.pathname==="/watch") id=u.searchParams.get("v")||"";
       else { var m=/^\/(embed|shorts|live|v)\/([\w-]{11})/.exec(u.pathname); if(m) id=m[2]; }
     }
+    if(h==="open.spotify.com"){
+      var sp=/^\/(?:intl-[a-z-]+\/)?(track|episode|album|playlist|show)\/([A-Za-z0-9]{22})/.exec(u.pathname);
+      return sp ? vidClean("","sp",sp[1]+":"+sp[2]) : null;
+    }
     if(id) return vidClean("","yt",id);
     return vidClean(u.href,"file","");
   }
   function vidTime(){
     try{
       if(!vid) return 0;
+      if(vid.kind==="sp") return spNow();
       if(vid.kind==="yt") return (ytReady&&ytPlayer) ? (ytPlayer.getCurrentTime()||0) : ((vidPendingState&&vidPendingState.time)||0);
       return vidEl ? vidEl.currentTime : 0;
     }catch(e){ return 0; }
@@ -1849,6 +2231,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function vidPlaying(){
     try{
       if(!vid) return false;
+      if(vid.kind==="sp") return !!(spReady&&!spState.paused);
       if(vid.kind==="yt") return !!(ytReady&&ytPlayer&&ytPlayer.getPlayerState()===1);
       return !!(vidEl&&!vidEl.paused&&!vidEl.ended);
     }catch(e){ return false; }
@@ -1858,7 +2241,13 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(!vid) return;
     vidWant=playing;
     try{
-      if(vid.kind==="yt"){
+      if(vid.kind==="sp"){
+        if(!spReady||!spCtl){ vidPendingState={time:time,playing:playing}; return; }
+        var sk0=Math.abs(spNow()-time)>1.5;
+        vidIgnore(sk0?2500:900);
+        if(sk0) spCtl.seek(Math.max(0,Math.round(time)));
+        if(playing&&spState.paused) spCtl.togglePlay(); else if(!playing&&!spState.paused) spCtl.togglePlay();
+      }else if(vid.kind==="yt"){
         if(!ytReady||!ytPlayer){ vidPendingState={time:time,playing:playing}; return; }
         var seek=Math.abs((ytPlayer.getCurrentTime()||0)-time)>1.2;
         vidIgnore(seek?2500:900);
@@ -1875,8 +2264,9 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     clearTimeout(vidTapTimer);
     vidTapTimer=setTimeout(function(){ if(vid&&vidWant&&!vidPlaying()) vidShowTap(true); },2500);
   }
+  function canControl(){ return !vid||vid.ctl==="all"||vid.owner===myId; }
   function vidLocal(a){
-    if(!vid) return;
+    if(!vid||!canControl()) return;
     vidCtl=true; vidWant=(a==="play");
     sendAll({t:"vid",a:a,time:vidTime(),playing:a==="play"});
   }
@@ -1903,17 +2293,34 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     clearInterval(vidSyncTimer); vidSyncTimer=null; clearTimeout(vidTapTimer);
     try{ if(ytPlayer&&ytPlayer.destroy) ytPlayer.destroy(); }catch(e){}
     ytPlayer=null; ytReady=false; vidPendingState=null;
+    try{ if(spCtl&&spCtl.destroy) spCtl.destroy(); }catch(e){}
+    spCtl=null; spReady=false; spState={paused:true,pos:0,at:0};
     if(vidEl){ try{ vidEl.pause(); vidEl.removeAttribute("src"); vidEl.load(); }catch(e){} vidEl=null; }
     var slot=$("vidSlot"); if(slot) slot.innerHTML="";
     if(!keep){
       vid=null; vidWant=false; vidCtl=false;
-      $("vidStage").classList.add("hidden"); $("btnVidClear").classList.add("hidden"); vidShowTap(false);
+      $("vidStage").classList.add("hidden"); $("vidStage").classList.remove("music"); $("vidStage").classList.remove("sp"); $("btnVidClear").classList.add("hidden"); $("vidSlot").classList.remove("locked"); $("vidCap").classList.add("hidden"); vidShowTap(false);
     }
   }
+  function vidCapSet(v){
+    var cap=$("vidCap"), img=$("vidCapImg"), tx=$("vidCapTxt");
+    if(!v||!v.music||v.kind==="sp"){ cap.classList.add("hidden"); return; }
+    if(v.kind==="yt"){ img.src="https://i.ytimg.com/vi/"+v.ytId+"/mqdefault.jpg"; img.classList.remove("hidden"); tx.textContent="Carregando…"; }
+    else {
+      var nm=""; try{ nm=decodeURIComponent(new URL(v.url).pathname.split("/").pop()||"").replace(/\.[a-z0-9]{2,4}$/i,"").replace(/[_]+/g," ").trim(); }catch(e){}
+      img.classList.add("hidden"); tx.textContent=nm||"Música";
+    }
+    cap.classList.remove("hidden");
+  }
+  function vidCapTitle(){
+    if(!(vid&&vid.kind==="yt"&&vid.music&&ytPlayer&&ytReady)) return;
+    try{ var d=ytPlayer.getVideoData(); if(d&&d.title) $("vidCapTxt").textContent=d.title; }catch(e){}
+  }
+  $("vidCapImg").onerror=function(){ this.classList.add("hidden"); };
   function vidBuild(v,time,playing){
     vidTeardown(true);
-    vid=v; vidWant=playing; vidShowTap(false);
-    $("vidStage").classList.remove("hidden"); $("btnVidClear").classList.remove("hidden");
+    vid=v; vidWant=playing; vidShowTap(false); vidCapSet(v);
+    $("vidStage").classList.remove("hidden"); $("vidStage").classList.toggle("music",!!v.music); $("btnVidClear").classList.toggle("hidden",!canControl()); $("vidSlot").classList.toggle("locked",!canControl()&&v.kind!=="sp"); $("vidStage").classList.toggle("sp",v.kind==="sp");
     var slot=$("vidSlot");
     if(v.kind==="yt"){
       var host=document.createElement("div"); host.id="ytHost"; slot.appendChild(host);
@@ -1926,10 +2333,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           videoId:v.ytId, width:"100%", height:"100%",
           playerVars:pv,
           events:{
-            onReady:function(){ if(vid!==v) return; ytReady=true; var st=vidPendingState; vidPendingState=null; if(st) vidApply(st.time,st.playing); },
+            onReady:function(){ if(vid!==v) return; ytReady=true; var st=vidPendingState; vidPendingState=null; vidCapTitle(); if(st) vidApply(st.time,st.playing); },
             onStateChange:function(e){
               if(vid!==v) return;
-              if(e.data===1) vidShowTap(false);
+              if(e.data===1){ vidShowTap(false); vidCapTitle(); }
               if(vidIsIgn()) return;
               if(e.data===1) vidLocal("play"); else if(e.data===2) vidLocal("pause");
             },
@@ -1939,6 +2346,30 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
               setMsg(ytErrText(c)+" (código "+c+")",true);
             }
           }
+        });
+      });
+    }else if(v.kind==="sp"){
+      var sh=document.createElement("div"); sh.id="spHost"; slot.appendChild(sh);
+      vidPendingState={time:time,playing:playing};
+      spLoad(function(){
+        if(vid!==v) return;
+        var parts=v.ytId.split(":");
+        spApi.createController(sh,{uri:"spotify:"+parts[0]+":"+parts[1],width:"100%",height:152},function(ctl){
+          if(vid!==v){ try{ctl.destroy()}catch(e){} return; }
+          spCtl=ctl;
+          ctl.addListener("ready",function(){
+            if(vid!==v) return;
+            spReady=true; var st=vidPendingState; vidPendingState=null; if(st) vidApply(st.time,st.playing);
+          });
+          ctl.addListener("playback_update",function(e){
+            var d=(e&&e.data)||{}, pos=(+d.position||0)/1000, paused=!!d.isPaused, now=Date.now();
+            var expected=spState.paused ? spState.pos : spState.pos+(now-spState.at)/1000;
+            var was=spState.paused, drift=Math.abs(pos-expected);
+            spState.pos=pos; spState.paused=paused; spState.at=now;
+            if(vid!==v||vidIsIgn()||!canControl()) return;
+            if(paused!==was) vidLocal(paused?"pause":"play");
+            else if(drift>3) vidLocal(paused?"pause":"play");
+          });
         });
       });
     }else{
@@ -1957,39 +2388,100 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   function vidSendState(conn){
     if(!vid) return;
-    try{ conn.send({t:"vid",a:"load",url:vid.url,kind:vid.kind,ytId:vid.ytId||"",time:vidTime(),playing:vidPlaying()}); }catch(e){}
+    try{ conn.send({t:"vid",a:"load",url:vid.url,kind:vid.kind,ytId:vid.ytId||"",music:!!vid.music,ctl:vid.ctl||"all",owner:vid.owner||"",time:vidTime(),playing:vidPlaying()}); }catch(e){}
   }
   function vidOnMsg(d,id){
     if(!active) return;
     if(d.a==="load"){
       var v=vidClean(d.url,d.kind,d.ytId); if(!v) return;
+      v.music=!!d.music; v.ctl=(d.ctl==="me")?"me":"all"; v.owner=(typeof d.owner==="string"&&d.owner)?d.owner:id;
       var t=+d.time||0, pl=!!d.playing;
+      if(vid&&vid.ctl==="me"&&vid.url!==v.url&&id!==vid.owner) return;
       vidCtl=false;
       if(vid&&vid.url===v.url){ vidApply(t,pl); return; }
-      setMsg(nameOf(id)+" colocou um vídeo na sala.");
+      setMsg(nameOf(id)+(v.music?" colocou uma música na sala.":" colocou um vídeo na sala."));
       vidBuild(v,t,pl);
     }else if(d.a==="clear"){
+      if(vid&&vid.ctl==="me"&&id!==vid.owner) return;
       if(vid){ vidTeardown(); setMsg(nameOf(id)+" removeu o vídeo da sala."); }
     }else if(vid&&(d.a==="play"||d.a==="pause"||d.a==="sync")){
+      if(vid.ctl==="me"&&id!==vid.owner) return;
       vidCtl=false;
       vidApply(+d.time||0, d.a==="sync" ? !!d.playing : d.a==="play");
     }
   }
-  function vidLoadFromInput(){
-    if(!active){ setMsg("Crie uma sala (Transmitir) ou entre em uma antes de colocar um vídeo.",true); return; }
-    var v=vidParse($("vidUrl").value);
-    if(!v){ setMsg("Esse link não parece ser de um vídeo. Cole um link do YouTube ou de um arquivo .mp4 / .webm que comece com https://",true); return; }
-    $("vidUrl").value=""; vidCtl=true;
-    vidBuild(v,0,true);
-    sendAll({t:"vid",a:"load",url:v.url,kind:v.kind,ytId:v.ytId||"",time:0,playing:true});
-    setMsg("Vídeo colocado na sala. Quem está nela vê junto.");
+  var mMode="video", mPlat="yt";
+  var M_KIND={sp:"sp",ytm:"yt",yt:"yt",file:"file"}, M_NAME={sp:"Spotify",ytm:"YouTube Music",yt:"YouTube",file:"Arquivo",aud:"Áudio do computador"};
+  var M_ID={sp:"mpSp",ytm:"mpYtm",yt:"mpYt",file:"mpFile",aud:"mpAud"};
+  var M_HINT={
+    sp:"Com o player do Spotify, cada pessoa só ouve a música completa se estiver logada no Spotify neste navegador (sem login, só trechos de 30 segundos). Para todo mundo ouvir completa, use \"Áudio do computador\".",
+    aud:"Abra o Spotify (app ou site) em outra janela e aperte play. Depois clique no botão abaixo, escolha a guia ou a tela inteira e marque \"Compartilhar áudio\". Todo mundo ouve a música completa, pela sua conta. Prefira escolher só a guia do player: compartilhar a tela inteira com áudio também envia o som da própria sala e pode causar eco."
+  };
+  function mSetPlat(pl){
+    mPlat=pl;
+    Object.keys(M_ID).forEach(function(k){ $(M_ID[k]).classList.toggle("on",k===pl); });
+    var ph={sp:"https://open.spotify.com/track/...",ytm:"https://music.youtube.com/watch?v=...",yt:"https://youtube.com/watch?v=...",file:(mMode==="music"?"https://.../musica.mp3":"https://.../video.mp4")};
+    var aud=(pl==="aud");
+    if(!aud) $("mUrl").placeholder=ph[pl];
+    $("mUrl").classList.toggle("hidden",aud); $("mUrlLbl").classList.toggle("hidden",aud); $("mCtlBox").classList.toggle("hidden",aud);
+    $("mAdd").textContent=aud?"Escolher o que compartilhar":"Adicionar";
+    $("mSong").classList.toggle("hidden",!aud); $("mSongLbl").classList.toggle("hidden",!aud);
+    $("mErr").classList.add("hidden");
+    var h=$("mHint"); if(M_HINT[pl]){ h.textContent=M_HINT[pl]; h.classList.remove("hidden"); } else h.classList.add("hidden");
   }
-  $("btnVidLoad").onclick=vidLoadFromInput;
-  $("vidUrl").addEventListener("keydown",function(e){ if(e.key==="Enter") vidLoadFromInput(); });
-  $("btnVidClear").onclick=function(){ if(!vid) return; vidTeardown(); sendAll({t:"vid",a:"clear"}); setMsg("Vídeo removido da sala."); };
+  function mediaOpen(music){
+    if(!active){ setMsg("Crie uma sala (Transmitir ou Criar sala) ou entre em uma antes de colocar "+(music?"uma música.":"um vídeo."),true); return; }
+    mMode=music?"music":"video";
+    $("mTitle").textContent=music?"Adicionar música":"Adicionar vídeo";
+    $("mpSp").classList.toggle("hidden",!music); $("mpYtm").classList.toggle("hidden",!music); $("mpAud").classList.toggle("hidden",!music);
+    mSetPlat(music?"sp":"yt");
+    $("mUrl").value=""; $("mErr").classList.add("hidden");
+    $("mediaModal").classList.remove("hidden");
+    setTimeout(function(){ try{ $("mUrl").focus(); }catch(e){} },30);
+  }
+  function mediaClose(){ $("mediaModal").classList.add("hidden"); }
+  function vidLoadFromInput(music,plat,ctl){
+    var err=$("mErr"); err.classList.add("hidden");
+    var fail=function(t){ err.textContent=t; err.classList.remove("hidden"); return false; };
+    if(!active){ mediaClose(); setMsg("Você não está em uma sala.",true); return false; }
+    if(vid&&!canControl()) return fail("Já tem algo tocando e só quem colocou pode trocar.");
+    var v=vidParse($("mUrl").value);
+    if(!v) return fail("Esse link não parece válido. Ele precisa começar com https://");
+    if(v.kind!==M_KIND[plat]){
+      var is=v.kind==="sp"?"Spotify":v.kind==="yt"?"YouTube":"um arquivo direto";
+      var go=v.kind==="sp"?"Spotify":v.kind==="yt"?(music?"YouTube Music":"YouTube"):"Arquivo";
+      return fail("Esse link é de "+is+", mas você escolheu "+M_NAME[plat]+". Escolha \""+go+"\" em Plataforma.");
+    }
+    v.music=!!music; v.ctl=(ctl==="all")?"all":"me"; v.owner=myId;
+    vidCtl=true;
+    vidBuild(v,0,true);
+    sendAll({t:"vid",a:"load",url:v.url,kind:v.kind,ytId:v.ytId||"",music:!!music,ctl:v.ctl,owner:v.owner,time:0,playing:true});
+    setMsg(music?"Música colocada na sala. Todo mundo ouve junto.":"Vídeo colocado na sala. Quem está nela vê junto.");
+    return true;
+  }
+  function vidClear(){
+    if(!vid) return;
+    if(!canControl()){ setMsg("Só quem colocou pode parar ou remover.",true); return; }
+    var was=!!vid.music; vidTeardown(); sendAll({t:"vid",a:"clear"});
+    setMsg(was?"Música parada.":"Vídeo removido da sala.");
+  }
+  $("mpAud").onclick=function(){ mSetPlat("aud"); };
+  $("mpSp").onclick=function(){ mSetPlat("sp"); };
+  $("mpYtm").onclick=function(){ mSetPlat("ytm"); };
+  $("mpYt").onclick=function(){ mSetPlat("yt"); };
+  $("mpFile").onclick=function(){ mSetPlat("file"); };
+  $("mClose").onclick=mediaClose;
+  $("mediaModal").addEventListener("click",function(e){ if(e.target===this) mediaClose(); });
+  $("mAdd").onclick=function(){
+    if(mPlat==="aud"){ shareMusicAudio($("mSong").value).then(function(ok){ if(ok) mediaClose(); }); return; }
+    var r=document.querySelector('input[name="mctl"]:checked');
+    if(vidLoadFromInput(mMode==="music",mPlat,r?r.value:"me")) mediaClose();
+  };
+  $("mUrl").addEventListener("keydown",function(e){ if(e.key==="Enter") $("mAdd").click(); });
+  $("btnVidClear").onclick=vidClear;
   $("vidTap").onclick=function(){
     vidShowTap(false); vidWant=true; vidIgnore(1200);
-    try{ if(vid&&vid.kind==="yt"&&ytPlayer) ytPlayer.playVideo(); else if(vidEl) vidEl.play(); }catch(e){}
+    try{ if(vid&&vid.kind==="sp"&&spCtl){ if(spState.paused) spCtl.togglePlay(); } else if(vid&&vid.kind==="yt"&&ytPlayer) ytPlayer.playVideo(); else if(vidEl) vidEl.play(); }catch(e){}
   };
 
   $("codeIn").addEventListener("keydown",function(e){ if(e.key==="Enter") tryJoin(this.value); });
@@ -2008,7 +2500,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   $("btnGear").onclick=function(e){ e.stopPropagation(); gMenu($("gMenu").classList.contains("hidden")); };
   $("btnChangeName").onclick=function(){ gMenu(false); nickOpen(true); };
   document.addEventListener("click",function(e){ if(!$("gMenu").classList.contains("hidden") && !e.target.closest(".gearwrap")) gMenu(false); });
-  document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ gMenu(false); nickClose(); } });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ gMenu(false); nickClose(); mediaClose(); } });
   renderAll();
   if(!nick) nickOpen(false);
   if(location.hash.length>1){
