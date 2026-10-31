@@ -141,6 +141,12 @@ details.card .chips{display:flex;flex-direction:column;gap:8px}
 .musbadge.has-title #musText{font-size:12px;color:var(--muted);font-weight:600}
 .musbadge #musSong{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:12px}
 .musbadge #btnMusSong{flex:none;padding:8px 12px}
+.vidvol{display:flex;flex-direction:column;gap:4px;margin-top:6px;padding:7px 10px;border-radius:10px;background:rgba(14,17,36,.96);border:1px solid var(--line);font-size:12px}
+.vidvol .vh{color:var(--muted);font-size:11px;font-weight:600}
+.vidvol .vr{display:flex;align-items:center;gap:8px}
+.vidvol button{flex:none;width:30px;height:30px;padding:0;border-radius:50%;border:1px solid var(--line);background:#1a1f3d;color:var(--ink);font-size:14px}
+.vidvol input{flex:1;min-width:0;height:4px;accent-color:var(--accent2);cursor:pointer}
+.vidvol .vp{flex:none;width:38px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
 .vidcap{display:flex;align-items:center;gap:8px;margin-top:6px;padding:6px 8px;border-radius:10px;background:rgba(14,17,36,.96);border:1px solid var(--line);font-size:12px;font-weight:700}
 .vidcap img{flex:none;width:34px;height:34px;border-radius:6px;object-fit:cover}
 .vidcap span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -153,7 +159,8 @@ body.has-badge .vidstage.music{bottom:var(--badgeh,70px)}
 .vidstage.music{position:fixed;left:16px;bottom:16px;width:260px;margin:0;z-index:40}
 .vidstage.music::before{content:"🎵 Música da sala";display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 4px}
 .vidstage.sp .vidbox{aspect-ratio:auto;height:152px}
-.vidstage.music.sp{width:300px}
+.vidstage.sc .vidbox{aspect-ratio:auto;height:166px}
+.vidstage.music.sp,.vidstage.music.sc{width:300px}
 .vidstage.music .vidbox{border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.5)}
 @media(max-width:1180px){.main{grid-template-columns:240px minmax(0,1fr)}.col-side{grid-column:1 / -1}}
 @media(max-width:820px){.main{grid-template-columns:1fr}.col-main{order:1}.col-left{order:2;position:static;max-height:none}.col-side{order:3}.vidstage.music{width:200px}}
@@ -285,8 +292,9 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       <button id="mpSp" class="hidden"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#1ed760"/><path d="M6.5 9.3c3.6-1.1 8.2-.8 11.2 1M7 12.6c3-.8 6.6-.5 9.2 1M7.6 15.6c2.4-.6 5-.3 7.2.8" fill="none" stroke="#0b0d1f" stroke-width="1.7" stroke-linecap="round"/></svg>Spotify</button>
       <button id="mpYtm" class="hidden"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ff3b3b"/><circle cx="12" cy="12" r="6" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M10.4 9.6l4 2.4-4 2.4z" fill="#fff"/></svg>YouTube Music</button>
       <button id="mpAud" class="hidden"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>Áudio do computador (música completa)</button>
+      <button id="mpSc" class="hidden"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ff5500"/><path d="M5.5 14.5v-3M7.5 15v-5M9.5 15.2V9.5M11.5 15.3V8.5M13.5 15.3h4a2.2 2.2 0 0 0 .2-4.4A3.6 3.6 0 0 0 13.5 9z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>SoundCloud</button>
       <button id="mpYt" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="#ff3b3b" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="#fff"/></svg>YouTube</button>
-      <button id="mpFile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Arquivo</button>
+      <button id="mpFile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Arquivo do computador</button>
     </div>
     <div id="mCtlBox">
     <div class="mlbl">Quem pode controlar</div>
@@ -298,6 +306,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     <div class="merr hidden" id="mErr" role="alert"></div>
     <div class="mlbl hidden" id="mSongLbl">Nome da música (opcional)</div>
     <input id="mSong" class="hidden" maxlength="80" placeholder="Ex.: Anitta - Envolver" aria-label="Nome da música" autocomplete="off">
+    <input type="file" id="mFile" class="hidden" accept="video/*" aria-label="Arquivo do computador">
     <div class="mhint hidden" id="mHint"></div>
     <button class="mbtn" id="mAdd">Adicionar</button>
   </div>
@@ -351,6 +360,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       <div class="vidstage hidden" id="vidStage">
         <div class="vidbox"><div id="vidSlot"></div><button class="hidden" id="btnVidClear" aria-label="Remover da sala" title="Remover da sala">×</button><button class="hidden" id="vidTap">▶ Toque para ver o vídeo</button></div>
         <div class="vidcap hidden" id="vidCap"><img id="vidCapImg" class="hidden" alt=""><span id="vidCapTxt"></span></div>
+        <div class="vidvol hidden" id="vidVol">
+          <div class="vh">🔊 Volume só para você</div>
+          <div class="vr"><button id="btnVidMute" aria-label="Silenciar para mim" title="Silenciar para mim">🔊</button><input type="range" id="vidVolRange" min="0" max="1" step="0.01" value="1" aria-label="Volume só para você"><span class="vp" id="vidVolPct">100%</span></div>
+        </div>
       </div>
       <div class="stage" id="stage">
         <div class="tiles n0" id="tiles"></div>
@@ -435,7 +448,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   var $ = function(id){return document.getElementById(id)};
   var peer = null, stream = null, calls = [], conns = [], active = false, gotStream = false, joinTimer = null;
   var roomCode = "", isCreator = false, myId = "", creatorId = "", myName = "Você", creatorOpen = false;
-  var members = {}, incoming = {}, tiles = {}, names = {}, extras = [], musicEx = null, musicIn = {}, musicVol = 1, musicMuted = false, musMeta = {}, musTok = 0;
+  var members = {}, incoming = {}, tiles = {}, names = {}, extras = [], musicEx = null, fileEx = null, musicIn = {}, musicVol = 1, musicMuted = false, musMeta = {}, musTok = 0;
   function isMe(k){ return k==="me"||String(k).indexOf("me~")===0; }
   var viewConn = null, statsTimer = null, lastDiag = "";
   var idlePaused = false, lastAct = Date.now(), userMuted = false, forcedMute = false, userPaused = false, joining = false, starting = false;
@@ -889,7 +902,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     else if(kind==="unshare"){ sfxTone(c,880,520,t,0.16,0.12); sfxTone(c,520,330,t+0.16,0.2,0.12); }
   }
   ["click","keydown","touchstart"].forEach(function(ev){ document.addEventListener(ev,function(){ sfxCtx(); },{once:true,passive:true}); });
-  function labelOf(k){ var a=String(k).split("~"); return nameOf(a[0])+(a[1]?" · tela "+a[1]:""); }
+  function labelOf(k){ var a=String(k).split("~"); return nameOf(a[0])+(a[1]?(a[1]==="8"?" · vídeo":" · tela "+a[1]):""); }
   function hasIncoming(id){ return Object.keys(incoming).some(function(k){ return k===id||k.indexOf(id+"~")===0; }); }
   function slotOf(id){ return names[id] || (members[id]&&members[id].name) || ""; }
   function nameOf(id){ return nicks[id] || slotOf(id) || "Pessoa"; }
@@ -1243,7 +1256,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     conns.forEach(function(c){try{c.close()}catch(e){}});
     calls=[]; conns=[]; incoming={}; members={}; names={}; localTileHidden=false;
     if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
-    extras.forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){} }); extras=[]; musicEx=null;
+    extras.forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){} }); extras=[]; musicEx=null; if(fileEx){ releaseFile(fileEx); fileEx=null; }
     Object.keys(musicIn).forEach(dropMusic);
     camMode=false;
     Object.keys(tiles).forEach(function(k){ removeTile(k); });
@@ -1254,7 +1267,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.30-i", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.30-m", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
@@ -1402,9 +1415,9 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     setTimeout(function(){ presence(false); },0);
     if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; sfx("unshare"); }
     camMode=false;
-    extras.filter(function(e){ return !e.music; }).forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){} removeTile("me~"+ex.slot); });
-    extras=extras.filter(function(e){ return e.music; });
-    calls=calls.filter(function(c){ if(c._slot===9) return true; try{c.close()}catch(e){} return false; });
+    extras.filter(function(e){ return !e.music&&!e.file; }).forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){} removeTile("me~"+ex.slot); });
+    extras=extras.filter(function(e){ return e.music||e.file; });
+    calls=calls.filter(function(c){ if(c._slot===9||c._slot===8) return true; try{c.close()}catch(e){} return false; });
     localTileHidden=false;
     removeTile("me");
     if(liveIncoming()===0) setStatus("Na sala",false);
@@ -1535,6 +1548,41 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   $("btnMusSong").onclick=function(){ musSetMine($("musSong").value); $("musSong").value=""; };
   $("musSong").addEventListener("keydown",function(e){ if(e.key==="Enter") $("btnMusSong").click(); });
   $("musCover").onerror=function(){ this.classList.add("hidden"); };
+  function releaseFile(ex){
+    try{ if(ex.el){ ex.el.pause(); ex.el.removeAttribute("src"); ex.el.load(); } }catch(e){}
+    try{ if(ex.url) URL.revokeObjectURL(ex.url); }catch(e){}
+  }
+  async function shareFile(file,music){
+    var err=$("mErr"); err.classList.add("hidden");
+    var fail=function(t){ err.textContent=t; err.classList.remove("hidden"); return false; };
+    if(!active){ mediaClose(); setMsg("Você não está em uma sala.",true); return false; }
+    if(musicEx||fileEx) return fail("Você já está compartilhando algo. Pare antes de colocar outro arquivo.");
+    if(vid&&!canControl()) return fail("Já tem algo tocando e só quem colocou pode trocar.");
+    var el=document.createElement("video");
+    if(!(el.captureStream||el.mozCaptureStream)) return fail("Este navegador não consegue compartilhar arquivos do computador. Use o Chrome, Edge ou Firefox no computador.");
+    var url=URL.createObjectURL(file);
+    el.src=url; el.controls=true; el.playsInline=true; el.preload="auto";
+    try{
+      await new Promise(function(res,rej){ el.onloadedmetadata=res; el.onerror=function(){ rej(new Error("x")); }; setTimeout(function(){ rej(new Error("t")); },10000); });
+    }catch(e){ try{ URL.revokeObjectURL(url); }catch(e2){} return fail("Não consegui abrir esse arquivo. Tente um .mp3, .m4a, .mp4 ou .webm."); }
+    el.onerror=null;
+    try{ await el.play(); }catch(e){}
+    await new Promise(function(r){ setTimeout(r,350); });
+    var cs=(el.captureStream||el.mozCaptureStream).call(el);
+    var tracks=music ? cs.getAudioTracks() : cs.getTracks();
+    if(!tracks.length){ releaseFile({el:el,url:url}); return fail(music?"Esse arquivo não tem áudio.":"Não consegui ler o conteúdo desse arquivo."); }
+    if(!active){ releaseFile({el:el,url:url}); return false; }
+    var ex={slot:music?9:8,stream:music?new MediaStream(tracks):cs,music:!!music,file:true,el:el,url:url};
+    extras.push(ex); fileEx=ex; if(music) musicEx=ex;
+    var name=String(file.name||"").replace(/\.[a-z0-9]{2,5}$/i,"").replace(/_+/g," ").trim().slice(0,80);
+    var v={kind:"local",music:!!music,ctl:"me",owner:myId,url:"local:"+name,ytId:"",name:name,el:el};
+    vidCtl=false; vidBuild(v,0,false);
+    Object.keys(members).forEach(function(id){ callExtra(id,ex); });
+    sfx("share"); renderAll();
+    if(music){ musBadgeUpdate(); musSetMine(name); }
+    setMsg((music?"Música":"Vídeo")+" do computador colocado na sala. Mantenha esta aba aberta enquanto estiver tocando.");
+    return true;
+  }
   async function shareMusicAudio(song){
     if(!active){ setMsg("Crie uma sala (Transmitir ou Criar sala) ou entre em uma antes de compartilhar música.",true); return false; }
     if(musicEx){ setMsg("Você já está compartilhando áudio. Pare antes de iniciar outro.",true); return false; }
@@ -1614,6 +1662,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){}
     try{ if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){}
     if(ex.music){ musicEx=null; delete musMeta.me; musBadgeUpdate(); }
+    if(ex.file){ fileEx=null; releaseFile(ex); if(vid&&vid.kind==="local") vidTeardown(); }
     calls=calls.filter(function(c){ if(c._slot===ex.slot){ try{c.close()}catch(e){} return false; } return true; });
     removeTile("me~"+ex.slot); sfx("unshare"); renderAll();
     if(msg) setMsg(msg);
@@ -2059,7 +2108,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   var userVol = 1;
   function applyVol(){
     remoteVideos().forEach(function(v){ v.volume=userVol; v.muted=userMuted; });
-    musApply();
+    musApply(); vidVolApply();
     $("btnMute").classList.toggle("off",userMuted);
     $("volSlider").style.setProperty("--v",(+$("volSlider").value*100)+"%");
   }
@@ -2179,6 +2228,51 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   // ===== Vídeo compartilhado na sala =====
   var vid=null, vidEl=null, ytPlayer=null, ytReady=false, ytLoading=false, ytCbs=[], vidIgnoreUntil=0, vidSyncTimer=null, vidCtl=false, vidWant=false, vidTapTimer=null, vidPendingState=null;
   var spApi=null, spLoading=false, spCbs=[], spCtl=null, spReady=false, spState={paused:true,pos:0,at:0};
+  var mediaVol=1, mediaMuted=false;
+  try{
+    var mdv=parseFloat(localStorage.getItem("telaja_medvol")); if(isFinite(mdv)) mediaVol=Math.max(0,Math.min(1,mdv));
+    mediaMuted=localStorage.getItem("telaja_medmute")==="1";
+  }catch(e){}
+  function vidVolShow(v){
+    var on=!!v&&((v.kind==="yt"&&v.music)||v.kind==="sc");
+    $("vidVol").classList.toggle("hidden",!on);
+    if(on) vidVolApply();
+  }
+  function vidVolApply(){
+    var off=mediaMuted||mediaVol===0||userMuted, vol=Math.round(mediaVol*100);
+    try{
+      if(vid&&vid.kind==="yt"&&ytReady&&ytPlayer){ ytPlayer.setVolume(vol); if(off) ytPlayer.mute(); else ytPlayer.unMute(); }
+      else if(vid&&vid.kind==="sc"&&scReady&&scW){ scW.setVolume(off?0:vol); }
+    }catch(e){}
+    var shown=(mediaMuted?0:mediaVol);
+    $("btnVidMute").textContent=(mediaMuted||mediaVol===0)?"🔇":(mediaVol<0.5?"🔉":"🔊");
+    $("btnVidMute").title=(mediaMuted||mediaVol===0)?"Ativar o som para mim":"Silenciar para mim";
+    $("vidVolRange").value=shown;
+    $("vidVolPct").textContent=Math.round(shown*100)+"%";
+  }
+  $("vidVolRange").addEventListener("input",function(){
+    mediaVol=+this.value; mediaMuted=false;
+    try{ localStorage.setItem("telaja_medvol",String(mediaVol)); localStorage.setItem("telaja_medmute","0"); }catch(e){}
+    vidVolApply();
+  });
+  $("btnVidMute").onclick=function(){
+    mediaMuted=!mediaMuted;
+    if(!mediaMuted&&mediaVol===0) mediaVol=0.5;
+    try{ localStorage.setItem("telaja_medmute",mediaMuted?"1":"0"); localStorage.setItem("telaja_medvol",String(mediaVol)); }catch(e){}
+    vidVolApply();
+  };
+  var scW=null, scReady=false, scLoading=false, scCbs=[], scState={paused:true,pos:0,at:0};
+  function scNow(){ return scState.paused ? scState.pos : scState.pos+(Date.now()-scState.at)/1000; }
+  function scLoad(cb){
+    if(window.SC&&window.SC.Widget){ cb(); return; }
+    scCbs.push(cb);
+    if(scLoading) return;
+    scLoading=true;
+    var sc=document.createElement("script"); sc.src="https://w.soundcloud.com/player/api.js"; sc.async=true;
+    sc.onload=function(){ scCbs.splice(0).forEach(function(f){ try{f()}catch(e){} }); };
+    sc.onerror=function(){ scLoading=false; scCbs=[]; setMsg("Não consegui carregar o player do SoundCloud. Verifique a conexão ou bloqueadores de anúncio.",true); };
+    document.head.appendChild(sc);
+  }
   function spNow(){ return spState.paused ? spState.pos : spState.pos+(Date.now()-spState.at)/1000; }
   function spLoad(cb){
     if(spApi){ cb(); return; }
@@ -2197,6 +2291,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       var sm=/^(track|episode|album|playlist|show):([A-Za-z0-9]{22})$/.exec(ytId||"");
       return sm ? {kind:"sp",ytId:ytId,url:"https://open.spotify.com/"+sm[1]+"/"+sm[2]} : null;
     }
+    if(kind==="sc"){
+      var cm=/^([A-Za-z0-9_-]{1,60})\/([A-Za-z0-9_-]{1,120})$/.exec(ytId||"");
+      return cm ? {kind:"sc",ytId:ytId,url:"https://soundcloud.com/"+cm[1]+"/"+cm[2]} : null;
+    }
     if(kind==="yt"){
       return /^[\w-]{11}$/.test(ytId||"") ? {kind:"yt",ytId:ytId,url:"https://www.youtube.com/watch?v="+ytId} : null;
     }
@@ -2213,6 +2311,14 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       if(u.pathname==="/watch") id=u.searchParams.get("v")||"";
       else { var m=/^\/(embed|shorts|live|v)\/([\w-]{11})/.exec(u.pathname); if(m) id=m[2]; }
     }
+    if(h==="on.soundcloud.com") return null;
+    if(h==="soundcloud.com"){
+      var segs=u.pathname.split("/").filter(Boolean);
+      var NOT=["discover","search","stream","you","upload","charts","settings","pages","terms-of-use","jobs","imprint","mobile","feed","messages","notifications"];
+      var BADSEC=["sets","likes","reposts","followers","following","tracks","albums","popular-tracks","comments","spotlight"];
+      if(segs.length>=2 && NOT.indexOf(segs[0])<0 && BADSEC.indexOf(segs[1])<0) return vidClean("","sc",segs[0]+"/"+segs[1]);
+      return null;
+    }
     if(h==="open.spotify.com"){
       var sp=/^\/(?:intl-[a-z-]+\/)?(track|episode|album|playlist|show)\/([A-Za-z0-9]{22})/.exec(u.pathname);
       return sp ? vidClean("","sp",sp[1]+":"+sp[2]) : null;
@@ -2223,6 +2329,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function vidTime(){
     try{
       if(!vid) return 0;
+      if(vid.kind==="sc") return scNow();
       if(vid.kind==="sp") return spNow();
       if(vid.kind==="yt") return (ytReady&&ytPlayer) ? (ytPlayer.getCurrentTime()||0) : ((vidPendingState&&vidPendingState.time)||0);
       return vidEl ? vidEl.currentTime : 0;
@@ -2231,6 +2338,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function vidPlaying(){
     try{
       if(!vid) return false;
+      if(vid.kind==="sc") return !!(scReady&&!scState.paused);
       if(vid.kind==="sp") return !!(spReady&&!spState.paused);
       if(vid.kind==="yt") return !!(ytReady&&ytPlayer&&ytPlayer.getPlayerState()===1);
       return !!(vidEl&&!vidEl.paused&&!vidEl.ended);
@@ -2241,7 +2349,13 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(!vid) return;
     vidWant=playing;
     try{
-      if(vid.kind==="sp"){
+      if(vid.kind==="sc"){
+        if(!scReady||!scW){ vidPendingState={time:time,playing:playing}; return; }
+        var sk1=Math.abs(scNow()-time)>1.5;
+        vidIgnore(sk1?2500:900);
+        if(sk1) scW.seekTo(Math.max(0,Math.round(time*1000)));
+        if(playing&&scState.paused) scW.play(); else if(!playing&&!scState.paused) scW.pause();
+      }else if(vid.kind==="sp"){
         if(!spReady||!spCtl){ vidPendingState={time:time,playing:playing}; return; }
         var sk0=Math.abs(spNow()-time)>1.5;
         vidIgnore(sk0?2500:900);
@@ -2266,7 +2380,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   }
   function canControl(){ return !vid||vid.ctl==="all"||vid.owner===myId; }
   function vidLocal(a){
-    if(!vid||!canControl()) return;
+    if(!vid||vid.kind==="local"||!canControl()) return;
     vidCtl=true; vidWant=(a==="play");
     sendAll({t:"vid",a:a,time:vidTime(),playing:a==="play"});
   }
@@ -2290,21 +2404,24 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     return "O YouTube não conseguiu tocar esse vídeo.";
   }
   function vidTeardown(keep){
+    if(vid&&vid.kind==="local"&&fileEx){ removeExtra(fileEx); }
     clearInterval(vidSyncTimer); vidSyncTimer=null; clearTimeout(vidTapTimer);
     try{ if(ytPlayer&&ytPlayer.destroy) ytPlayer.destroy(); }catch(e){}
     ytPlayer=null; ytReady=false; vidPendingState=null;
     try{ if(spCtl&&spCtl.destroy) spCtl.destroy(); }catch(e){}
     spCtl=null; spReady=false; spState={paused:true,pos:0,at:0};
+    scW=null; scReady=false; scState={paused:true,pos:0,at:0};
     if(vidEl){ try{ vidEl.pause(); vidEl.removeAttribute("src"); vidEl.load(); }catch(e){} vidEl=null; }
     var slot=$("vidSlot"); if(slot) slot.innerHTML="";
     if(!keep){
       vid=null; vidWant=false; vidCtl=false;
-      $("vidStage").classList.add("hidden"); $("vidStage").classList.remove("music"); $("vidStage").classList.remove("sp"); $("btnVidClear").classList.add("hidden"); $("vidSlot").classList.remove("locked"); $("vidCap").classList.add("hidden"); vidShowTap(false);
+      $("vidStage").classList.add("hidden"); $("vidStage").classList.remove("music"); $("vidStage").classList.remove("sp"); $("vidStage").classList.remove("sc"); $("btnVidClear").classList.add("hidden"); $("vidSlot").classList.remove("locked"); $("vidCap").classList.add("hidden"); $("vidVol").classList.add("hidden"); vidShowTap(false);
     }
   }
   function vidCapSet(v){
     var cap=$("vidCap"), img=$("vidCapImg"), tx=$("vidCapTxt");
-    if(!v||!v.music||v.kind==="sp"){ cap.classList.add("hidden"); return; }
+    if(!v||!v.music||v.kind==="sp"||v.kind==="sc"){ cap.classList.add("hidden"); return; }
+    if(v.kind==="local"){ img.classList.add("hidden"); tx.textContent=v.name||"Música do computador"; cap.classList.remove("hidden"); return; }
     if(v.kind==="yt"){ img.src="https://i.ytimg.com/vi/"+v.ytId+"/mqdefault.jpg"; img.classList.remove("hidden"); tx.textContent="Carregando…"; }
     else {
       var nm=""; try{ nm=decodeURIComponent(new URL(v.url).pathname.split("/").pop()||"").replace(/\.[a-z0-9]{2,4}$/i,"").replace(/[_]+/g," ").trim(); }catch(e){}
@@ -2319,8 +2436,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   $("vidCapImg").onerror=function(){ this.classList.add("hidden"); };
   function vidBuild(v,time,playing){
     vidTeardown(true);
-    vid=v; vidWant=playing; vidShowTap(false); vidCapSet(v);
-    $("vidStage").classList.remove("hidden"); $("vidStage").classList.toggle("music",!!v.music); $("btnVidClear").classList.toggle("hidden",!canControl()); $("vidSlot").classList.toggle("locked",!canControl()&&v.kind!=="sp"); $("vidStage").classList.toggle("sp",v.kind==="sp");
+    vid=v; vidWant=playing; vidShowTap(false); vidCapSet(v); vidVolShow(v);
+    $("vidStage").classList.remove("hidden"); $("vidStage").classList.toggle("music",!!v.music); $("btnVidClear").classList.toggle("hidden",!canControl()); $("vidSlot").classList.toggle("locked",!canControl()&&v.kind!=="sp"); $("vidStage").classList.toggle("sp",v.kind==="sp"); $("vidStage").classList.toggle("sc",v.kind==="sc");
     var slot=$("vidSlot");
     if(v.kind==="yt"){
       var host=document.createElement("div"); host.id="ytHost"; slot.appendChild(host);
@@ -2333,7 +2450,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           videoId:v.ytId, width:"100%", height:"100%",
           playerVars:pv,
           events:{
-            onReady:function(){ if(vid!==v) return; ytReady=true; var st=vidPendingState; vidPendingState=null; vidCapTitle(); if(st) vidApply(st.time,st.playing); },
+            onReady:function(){ if(vid!==v) return; ytReady=true; var st=vidPendingState; vidPendingState=null; vidCapTitle(); vidVolApply(); if(st) vidApply(st.time,st.playing); },
             onStateChange:function(e){
               if(vid!==v) return;
               if(e.data===1){ vidShowTap(false); vidCapTitle(); }
@@ -2372,6 +2489,41 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
           });
         });
       });
+    }else if(v.kind==="local"){
+      vidEl=v.el; slot.appendChild(v.el);
+    }else if(v.kind==="sc"){
+      var ifr=document.createElement("iframe");
+      ifr.allow="autoplay"; ifr.setAttribute("scrolling","no");
+      ifr.src="https://w.soundcloud.com/player/?url="+encodeURIComponent(v.url)+"&auto_play=false&hide_related=true&show_comments=false&show_reposts=false&visual=false";
+      slot.appendChild(ifr);
+      vidPendingState={time:time,playing:playing};
+      scLoad(function(){
+        if(vid!==v) return;
+        var w=window.SC.Widget(ifr), E=window.SC.Widget.Events;
+        scW=w;
+        var setPos=function(e){ if(e&&typeof e.currentPosition==="number"){ scState.pos=e.currentPosition/1000; scState.at=Date.now(); } };
+        w.bind(E.READY,function(){
+          if(vid!==v) return;
+          scReady=true; var st=vidPendingState; vidPendingState=null; vidVolApply(); if(st) vidApply(st.time,st.playing);
+        });
+        w.bind(E.PLAY,function(e){
+          scState.paused=false; setPos(e); scState.at=Date.now(); vidShowTap(false);
+          if(vid!==v||vidIsIgn()||!canControl()) return;
+          vidLocal("play");
+        });
+        w.bind(E.PAUSE,function(e){
+          setPos(e); scState.paused=true;
+          if(vid!==v||vidIsIgn()||!canControl()) return;
+          vidLocal("pause");
+        });
+        w.bind(E.SEEK,function(e){
+          setPos(e);
+          if(vid!==v||vidIsIgn()||!canControl()) return;
+          vidLocal(scState.paused?"pause":"play");
+        });
+        w.bind(E.PLAY_PROGRESS,setPos);
+        w.bind(E.ERROR,function(){ if(vid===v) setMsg("O SoundCloud não conseguiu tocar essa música aqui (ela pode ser privada ou bloqueada pelo artista).",true); });
+      });
     }else{
       var el=document.createElement("video");
       el.controls=true; el.playsInline=true; el.preload="auto"; el.src=v.url;
@@ -2387,7 +2539,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     },4000);
   }
   function vidSendState(conn){
-    if(!vid) return;
+    if(!vid||vid.kind==="local") return;
     try{ conn.send({t:"vid",a:"load",url:vid.url,kind:vid.kind,ytId:vid.ytId||"",music:!!vid.music,ctl:vid.ctl||"all",owner:vid.owner||"",time:vidTime(),playing:vidPlaying()}); }catch(e){}
   }
   function vidOnMsg(d,id){
@@ -2411,20 +2563,23 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     }
   }
   var mMode="video", mPlat="yt";
-  var M_KIND={sp:"sp",ytm:"yt",yt:"yt",file:"file"}, M_NAME={sp:"Spotify",ytm:"YouTube Music",yt:"YouTube",file:"Arquivo",aud:"Áudio do computador"};
-  var M_ID={sp:"mpSp",ytm:"mpYtm",yt:"mpYt",file:"mpFile",aud:"mpAud"};
+  var M_KIND={sp:"sp",sc:"sc",ytm:"yt",yt:"yt",file:"file"}, M_NAME={sp:"Spotify",sc:"SoundCloud",ytm:"YouTube Music",yt:"YouTube",file:"Arquivo",aud:"Áudio do computador"};
+  var M_ID={sp:"mpSp",sc:"mpSc",ytm:"mpYtm",yt:"mpYt",file:"mpFile",aud:"mpAud"};
   var M_HINT={
+    file:"O arquivo do seu computador toca para todo mundo na sala (ele não é enviado a nenhum servidor, só transmitido ao vivo). Só você controla: play, pausa e avanço. Mantenha esta aba aberta enquanto estiver tocando.",
+    sc:"O SoundCloud toca a música completa para todo mundo, sem login, e fica sincronizado na sala. Só tem o que os artistas publicaram lá (nem todo sucesso comercial está). Para o grande catálogo, use o YouTube Music.",
+    ytm:"O YouTube Music toca a música completa para todo mundo, sem login. Cole o link da música (music.youtube.com/watch?v=...).",
     sp:"Com o player do Spotify, cada pessoa só ouve a música completa se estiver logada no Spotify neste navegador (sem login, só trechos de 30 segundos). Para todo mundo ouvir completa, use \"Áudio do computador\".",
     aud:"Abra o Spotify (app ou site) em outra janela e aperte play. Depois clique no botão abaixo, escolha a guia ou a tela inteira e marque \"Compartilhar áudio\". Todo mundo ouve a música completa, pela sua conta. Prefira escolher só a guia do player: compartilhar a tela inteira com áudio também envia o som da própria sala e pode causar eco."
   };
   function mSetPlat(pl){
     mPlat=pl;
     Object.keys(M_ID).forEach(function(k){ $(M_ID[k]).classList.toggle("on",k===pl); });
-    var ph={sp:"https://open.spotify.com/track/...",ytm:"https://music.youtube.com/watch?v=...",yt:"https://youtube.com/watch?v=...",file:(mMode==="music"?"https://.../musica.mp3":"https://.../video.mp4")};
-    var aud=(pl==="aud");
-    if(!aud) $("mUrl").placeholder=ph[pl];
-    $("mUrl").classList.toggle("hidden",aud); $("mUrlLbl").classList.toggle("hidden",aud); $("mCtlBox").classList.toggle("hidden",aud);
-    $("mAdd").textContent=aud?"Escolher o que compartilhar":"Adicionar";
+    var ph={sp:"https://open.spotify.com/track/...",sc:"https://soundcloud.com/artista/musica",ytm:"https://music.youtube.com/watch?v=...",yt:"https://youtube.com/watch?v=...",file:(mMode==="music"?"https://.../musica.mp3":"https://.../video.mp4")};
+    var aud=(pl==="aud"), fil=(pl==="file"), nolink=aud||fil;
+    if(!nolink) $("mUrl").placeholder=ph[pl];
+    $("mUrl").classList.toggle("hidden",nolink); $("mUrlLbl").classList.toggle("hidden",nolink); $("mCtlBox").classList.toggle("hidden",nolink);
+    $("mAdd").textContent=aud?"Escolher o que compartilhar":(fil?"Escolher arquivo do computador":"Adicionar");
     $("mSong").classList.toggle("hidden",!aud); $("mSongLbl").classList.toggle("hidden",!aud);
     $("mErr").classList.add("hidden");
     var h=$("mHint"); if(M_HINT[pl]){ h.textContent=M_HINT[pl]; h.classList.remove("hidden"); } else h.classList.add("hidden");
@@ -2433,8 +2588,9 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(!active){ setMsg("Crie uma sala (Transmitir ou Criar sala) ou entre em uma antes de colocar "+(music?"uma música.":"um vídeo."),true); return; }
     mMode=music?"music":"video";
     $("mTitle").textContent=music?"Adicionar música":"Adicionar vídeo";
-    $("mpSp").classList.toggle("hidden",!music); $("mpYtm").classList.toggle("hidden",!music); $("mpAud").classList.toggle("hidden",!music);
+    $("mpSp").classList.toggle("hidden",!music); $("mpYtm").classList.toggle("hidden",!music); $("mpAud").classList.toggle("hidden",!music); $("mpSc").classList.toggle("hidden",!music);
     mSetPlat(music?"sp":"yt");
+    $("mFile").accept=music?"audio/*":"video/*";
     $("mUrl").value=""; $("mErr").classList.add("hidden");
     $("mediaModal").classList.remove("hidden");
     setTimeout(function(){ try{ $("mUrl").focus(); }catch(e){} },30);
@@ -2448,8 +2604,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var v=vidParse($("mUrl").value);
     if(!v) return fail("Esse link não parece válido. Ele precisa começar com https://");
     if(v.kind!==M_KIND[plat]){
-      var is=v.kind==="sp"?"Spotify":v.kind==="yt"?"YouTube":"um arquivo direto";
-      var go=v.kind==="sp"?"Spotify":v.kind==="yt"?(music?"YouTube Music":"YouTube"):"Arquivo";
+      var is=v.kind==="sp"?"Spotify":v.kind==="sc"?"SoundCloud":v.kind==="yt"?"YouTube":"um arquivo direto";
+      var go=v.kind==="sp"?"Spotify":v.kind==="sc"?"SoundCloud":v.kind==="yt"?(music?"YouTube Music":"YouTube"):"Arquivo";
       return fail("Esse link é de "+is+", mas você escolheu "+M_NAME[plat]+". Escolha \""+go+"\" em Plataforma.");
     }
     v.music=!!music; v.ctl=(ctl==="all")?"all":"me"; v.owner=myId;
@@ -2462,17 +2618,28 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   function vidClear(){
     if(!vid) return;
     if(!canControl()){ setMsg("Só quem colocou pode parar ou remover.",true); return; }
-    var was=!!vid.music; vidTeardown(); sendAll({t:"vid",a:"clear"});
+    var was=!!vid.music, wasLocal=(vid.kind==="local"); vidTeardown(); if(!wasLocal) sendAll({t:"vid",a:"clear"});
     setMsg(was?"Música parada.":"Vídeo removido da sala.");
   }
   $("mpAud").onclick=function(){ mSetPlat("aud"); };
+  $("mpSc").onclick=function(){ mSetPlat("sc"); };
   $("mpSp").onclick=function(){ mSetPlat("sp"); };
   $("mpYtm").onclick=function(){ mSetPlat("ytm"); };
   $("mpYt").onclick=function(){ mSetPlat("yt"); };
   $("mpFile").onclick=function(){ mSetPlat("file"); };
   $("mClose").onclick=mediaClose;
   $("mediaModal").addEventListener("click",function(e){ if(e.target===this) mediaClose(); });
+  $("mFile").addEventListener("change",function(){
+    var f=this.files&&this.files[0]; this.value="";
+    if(!f) return;
+    $("mAdd").disabled=true; $("mAdd").textContent="Preparando o arquivo…";
+    shareFile(f,mMode==="music").then(function(ok){
+      $("mAdd").disabled=false; mSetPlat(mPlat);
+      if(ok) mediaClose();
+    });
+  });
   $("mAdd").onclick=function(){
+    if(mPlat==="file"){ $("mFile").click(); return; }
     if(mPlat==="aud"){ shareMusicAudio($("mSong").value).then(function(ok){ if(ok) mediaClose(); }); return; }
     var r=document.querySelector('input[name="mctl"]:checked');
     if(vidLoadFromInput(mMode==="music",mPlat,r?r.value:"me")) mediaClose();
@@ -2481,7 +2648,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   $("btnVidClear").onclick=vidClear;
   $("vidTap").onclick=function(){
     vidShowTap(false); vidWant=true; vidIgnore(1200);
-    try{ if(vid&&vid.kind==="sp"&&spCtl){ if(spState.paused) spCtl.togglePlay(); } else if(vid&&vid.kind==="yt"&&ytPlayer) ytPlayer.playVideo(); else if(vidEl) vidEl.play(); }catch(e){}
+    try{ if(vid&&vid.kind==="sc"&&scW){ scW.play(); } else if(vid&&vid.kind==="sp"&&spCtl){ if(spState.paused) spCtl.togglePlay(); } else if(vid&&vid.kind==="yt"&&ytPlayer) ytPlayer.playVideo(); else if(vidEl) vidEl.play(); }catch(e){}
   };
 
   $("codeIn").addEventListener("keydown",function(e){ if(e.key==="Enter") tryJoin(this.value); });
