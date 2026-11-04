@@ -408,6 +408,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       <div class="dock" id="dock">
         <button class="pillbtn primary" id="btnStart2">Transmitir</button>
         <button class="pillbtn" id="btnAddScreen" disabled title="Compartilha mais uma tela ao mesmo tempo (até 4 telas)">+ Outra tela</button>
+        <button class="pillbtn" id="btnCam" disabled title="Compartilha a sua câmera (e o microfone) com a sala">📷 Câmera</button>
         <button class="pillbtn hidden" id="btnDelScreen" title="Para de compartilhar a última tela extra">Tirar tela extra</button>
         <button class="pillbtn" id="btnMusicFocus" title="Colocar música na sala">🎵 Música</button>
         <button class="pillbtn" id="btnVideoFocus" title="Colocar um vídeo por link na sala">▶ Vídeo</button>
@@ -463,7 +464,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   var $ = function(id){return document.getElementById(id)};
   var peer = null, stream = null, calls = [], conns = [], active = false, gotStream = false, joinTimer = null;
   var roomCode = "", isCreator = false, myId = "", creatorId = "", myName = "Você", creatorOpen = false;
-  var members = {}, incoming = {}, tiles = {}, names = {}, extras = [], musicEx = null, fileEx = null, musicIn = {}, musicVol = 1, musicMuted = false, musMeta = {}, musTok = 0;
+  var members = {}, incoming = {}, tiles = {}, names = {}, extras = [], musicEx = null, fileEx = null, camEx = null, musicIn = {}, musicVol = 1, musicMuted = false, musMeta = {}, musTok = 0;
   function isMe(k){ return k==="me"||String(k).indexOf("me~")===0; }
   var viewConn = null, statsTimer = null, lastDiag = "";
   var idlePaused = false, lastAct = Date.now(), userMuted = false, forcedMute = false, userPaused = false, joining = false, starting = false;
@@ -917,7 +918,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     else if(kind==="unshare"){ sfxTone(c,880,520,t,0.16,0.12); sfxTone(c,520,330,t+0.16,0.2,0.12); }
   }
   ["click","keydown","touchstart"].forEach(function(ev){ document.addEventListener(ev,function(){ sfxCtx(); },{once:true,passive:true}); });
-  function labelOf(k){ var a=String(k).split("~"); return nameOf(a[0])+(a[1]?(a[1]==="8"?" · vídeo":" · tela "+a[1]):""); }
+  function labelOf(k){ var a=String(k).split("~"); return nameOf(a[0])+(a[1]?(a[1]==="8"?" · vídeo":a[1]==="7"?" · câmera":" · tela "+a[1]):""); }
   function hasIncoming(id){ return Object.keys(incoming).some(function(k){ return k===id||k.indexOf(id+"~")===0; }); }
   function slotOf(id){ return names[id] || (members[id]&&members[id].name) || ""; }
   function nameOf(id){ return nicks[id] || slotOf(id) || "Pessoa"; }
@@ -1245,8 +1246,10 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
 
     $("btnCreateRoom").classList.toggle("hidden", active);
     $("btnSwitch").disabled = !sharing;
-    $("btnAddScreen").disabled = !(sharing && !camMode && extras.filter(function(e){ return !e.music; }).length<3 && navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
-    $("btnDelScreen").classList.toggle("hidden", !extras.some(function(e){ return !e.music; }));
+    $("btnAddScreen").disabled = !(sharing && !camMode && extras.filter(function(e){ return !e.music&&!e.cam; }).length<3 && navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+    $("btnCam").disabled = !(active && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    $("btnCam").textContent = camEx ? "📷 Parar câmera" : "📷 Câmera";
+    $("btnDelScreen").classList.toggle("hidden", !extras.some(function(e){ return !e.music&&!e.cam; }));
     $("btnSwitch").textContent = camMode ? "Trocar câmera" : "Trocar tela";
     updateHideBtn();
     $("btnStop").disabled = !active;
@@ -1271,7 +1274,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     conns.forEach(function(c){try{c.close()}catch(e){}});
     calls=[]; conns=[]; incoming={}; members={}; names={}; localTileHidden=false;
     if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
-    extras.forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){} }); extras=[]; musicEx=null; if(fileEx){ releaseFile(fileEx); fileEx=null; }
+    extras.forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){} }); extras=[]; musicEx=null; camEx=null; if(fileEx){ releaseFile(fileEx); fileEx=null; }
     Object.keys(musicIn).forEach(dropMusic);
     camMode=false;
     Object.keys(tiles).forEach(function(k){ removeTile(k); });
@@ -1282,7 +1285,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.30-q", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.30-r", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
@@ -1430,9 +1433,9 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     setTimeout(function(){ presence(false); },0);
     if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; sfx("unshare"); }
     camMode=false;
-    extras.filter(function(e){ return !e.music&&!e.file; }).forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){} removeTile("me~"+ex.slot); });
-    extras=extras.filter(function(e){ return e.music||e.file; });
-    calls=calls.filter(function(c){ if(c._slot===9||c._slot===8) return true; try{c.close()}catch(e){} return false; });
+    extras.filter(function(e){ return !e.music&&!e.file&&!e.cam; }).forEach(function(ex){ try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){} removeTile("me~"+ex.slot); });
+    extras=extras.filter(function(e){ return e.music||e.file||e.cam; });
+    calls=calls.filter(function(c){ if(c._slot===9||c._slot===8||c._slot===7) return true; try{c.close()}catch(e){} return false; });
     localTileHidden=false;
     removeTile("me");
     if(liveIncoming()===0) setStatus("Na sala",false);
@@ -1648,12 +1651,33 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     this.textContent=mn?"+":"–"; this.title=mn?"Expandir":"Minimizar"; this.setAttribute("aria-label",this.title);
     document.documentElement.style.setProperty("--badgeh",(b.offsetHeight+28)+"px");
   };
+  async function shareCamera(){
+    if(!active) return setMsg("Crie uma sala (Transmitir ou Criar sala) ou entre em uma antes de compartilhar a câmera.",true);
+    if(camEx) return;
+    if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)) return setMsg("Este navegador não permite usar a câmera. Abra o site em https:// no Chrome, Edge, Firefox ou Safari.",true);
+    var vc={facingMode:"user",width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}}, ns=null, withMic=true;
+    try{
+      ns=await navigator.mediaDevices.getUserMedia({video:vc,audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+    }catch(e1){
+      if(e1&&(e1.name==="NotAllowedError"||e1.name==="SecurityError")) return setMsg("A câmera foi bloqueada. Libere a câmera para este site nas permissões do navegador e tente de novo.",true);
+      try{ ns=await navigator.mediaDevices.getUserMedia({video:vc}); withMic=false; }
+      catch(e2){ return setMsg(e2&&e2.name==="NotFoundError"?"Não encontrei nenhuma câmera neste aparelho.":"Não consegui abrir a câmera. Veja se outro programa não está usando ela.",true); }
+    }
+    if(!active||camEx){ ns.getTracks().forEach(function(t){t.stop()}); return; }
+    var ex={slot:7,stream:ns,cam:true}; camEx=ex; extras.push(ex);
+    var t=getTile("me~7","Você · câmera"); t.video.srcObject=ns; t.video.muted=true; t.video.style.transform="scaleX(-1)";
+    Object.keys(members).forEach(function(id){ callExtra(id,ex); });
+    var vt=ns.getVideoTracks()[0];
+    if(vt) vt.addEventListener("ended",function(){ removeExtra(ex,"A câmera foi desligada."); });
+    sfx("share"); renderAll();
+    setMsg(withMic?"Câmera ligada. O seu microfone também vai para a sala. Clique em \"Parar câmera\" para desligar.":"Câmera ligada (sem microfone). Clique em \"Parar câmera\" para desligar.");
+  }
   var addingScreen=false;
   async function addScreen(){
     if(addingScreen) return;
     if(!active||!stream||camMode) return setMsg("Comece a transmitir uma tela antes de adicionar outra.",true);
     if(!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia)) return setMsg("Este navegador não permite compartilhar mais de uma tela.",true);
-    if(extras.filter(function(e){ return !e.music; }).length>=3) return setMsg("Você já está com 4 telas ao mesmo tempo. Esse é o limite.",true);
+    if(extras.filter(function(e){ return !e.music&&!e.cam; }).length>=3) return setMsg("Você já está com 4 telas ao mesmo tempo. Esse é o limite.",true);
     var ns;
     addingScreen=true;
     try{ ns=await navigator.mediaDevices.getDisplayMedia(capConstraints()); }
@@ -1677,6 +1701,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     try{ ex.stream.getTracks().forEach(function(t){t.stop()}); }catch(e){}
     try{ if(ex.src) ex.src.getTracks().forEach(function(t){t.stop()}); }catch(e){}
     if(ex.music){ musicEx=null; delete musMeta.me; musBadgeUpdate(); }
+    if(ex.cam){ camEx=null; }
     if(ex.file){ fileEx=null; releaseFile(ex); if(vid&&vid.kind==="local") vidTeardown(); }
     calls=calls.filter(function(c){ if(c._slot===ex.slot){ try{c.close()}catch(e){} return false; } return true; });
     removeTile("me~"+ex.slot); sfx("unshare"); renderAll();
@@ -2218,7 +2243,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   $("btnStart2").onclick=startClick;
   $("btnCreateRoom").onclick=createRoomOnly;
   $("btnAddScreen").onclick=addScreen;
-  $("btnDelScreen").onclick=function(){ var sc=extras.filter(function(e){ return !e.music; }), ex=sc[sc.length-1]; if(ex) removeExtra(ex,"Tela "+ex.slot+" removida."); };
+  $("btnCam").onclick=function(){ if(camEx) removeExtra(camEx,"Câmera desligada."); else shareCamera(); };
+  $("btnDelScreen").onclick=function(){ var sc=extras.filter(function(e){ return !e.music&&!e.cam; }), ex=sc[sc.length-1]; if(ex) removeExtra(ex,"Tela "+ex.slot+" removida."); };
   $("btnMusicFocus").onclick=function(){ mediaOpen(true); };
   $("btnVideoFocus").onclick=function(){ mediaOpen(false); };
   $("btnSfx").textContent=sfxOn?"Sons: ligados":"Sons: desligados";
