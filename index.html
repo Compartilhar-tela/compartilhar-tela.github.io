@@ -435,11 +435,11 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       <details class="card">
         <summary class="ctitle">Qualidade e áudio da transmissão</summary>
         <div class="qset">
-        <label class="srow"><span>Resolução</span><select id="selRes" aria-label="Resolução"><option value="480">480p</option><option value="720">720p</option><option value="1080" selected>1080p (Full HD)</option></select></label>
+        <label class="srow"><span>Resolução</span><select id="selRes" aria-label="Resolução"><option value="480">480p</option><option value="720" selected>720p</option><option value="1080">1080p (Full HD)</option></select></label>
         <label class="srow"><span>Fluidez</span><select id="selFps" aria-label="Fluidez"><option value="30">30 fps</option><option value="60" selected>60 fps</option></select></label>
         <label class="srow"><span>Modo</span><select id="selMode" aria-label="Modo"><option value="auto">Automático</option><option value="game" selected>Jogo</option><option value="text">Texto</option></select></label>
         <label class="srow"><span>Encoder (hardware)</span><select id="selHardware" aria-label="Encoder"><option value="auto">Automático</option><option value="gpu" selected>Placa de vídeo (GPU / NVENC)</option><option value="cpu">Processador (CPU)</option></select></label>
-        <label class="srow"><span>Limite via servidor</span><select id="selRelay" aria-label="Limite via servidor"><option value="2000">2 Mbps</option><option value="3000">3 Mbps</option><option value="4000">4 Mbps</option><option value="6000">6 Mbps</option><option value="10000">10 Mbps</option><option value="0" selected>Sem limite</option></select></label>
+        <label class="srow"><span>Limite via servidor</span><select id="selRelay" aria-label="Limite via servidor"><option value="2000">2 Mbps</option><option value="3000">3 Mbps</option><option value="4000" selected>4 Mbps</option><option value="6000">6 Mbps</option><option value="10000">10 Mbps</option><option value="0">Sem limite</option></select></label>
         <label class="srow"><span>Áudio</span><select id="selAudio" aria-label="Áudio" title="Só da janela: precisa de Chrome, Edge ou Brave atualizados. No seletor do navegador escolha Janela e ligue a opção de áudio."><option value="window" selected>Só da janela</option><option value="system">Do sistema (tudo)</option><option value="none">Sem áudio</option></select></label>
         </div>
       </details>
@@ -719,7 +719,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     return {h:h,w:w,f:f,mode:m,kbps:kbps};
   }
   function capConstraintsCam(){
-    return { video:{ facingMode:camFacing, width:{ ideal:1920 }, height:{ ideal:1080 }, frameRate:{ ideal:60, max:60 } }, audio:audioCons() };
+    var q=qual();
+    return { video:{ facingMode:camFacing, width:{ ideal:q.w }, height:{ ideal:q.h }, frameRate:{ ideal:q.f, max:q.f } }, audio:audioCons() };
   }
   function capConstraints(){
     var q=qual(), v=audioChoice(), o={
@@ -758,11 +759,16 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
       return st.width+"×"+st.height+" a "+Math.round(st.frameRate||0)+" fps"+a;
     }catch(e){ return ""; }
   }
+  function camKbps(c){
+    var n=calls.filter(function(x){ return x._slot===7; }).length||1;
+    var k=Math.max(2500,Math.min(6000,Math.floor(20000/n)));
+    if(c&&c._relay){ var cap=+$("selRelay").value; if(cap>0) k=Math.min(k,cap); }
+    return k;
+  }
   function tuneCall(c){
     var pc=c&&c.peerConnection; if(!pc) return;
-    var q=qual(), kbps=q.kbps;
-    if(c._slot===7) kbps=Math.max(kbps,8000);
-    else if(c._slot>1&&c._slot!==9) kbps=Math.round(kbps*0.6);
+    var q=qual(), kbps=q.kbps, cam=(c._slot===7);
+    if(cam) kbps=camKbps(c); else if(c._slot>1&&c._slot!==9) kbps=Math.round(kbps*0.6);
     c._kbps=kbps;
     pc.getSenders().forEach(function(sn){
       if(!sn.track||sn.track.kind!=="video") return;
@@ -770,10 +776,11 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
         var pr=sn.getParameters();
         if(!pr.encodings||!pr.encodings.length) return;
         pr.encodings[0].maxBitrate=kbps*1000;
-        pr.encodings[0].maxFramerate = q.f;
+        pr.encodings[0].maxFramerate = cam ? 30 : q.f;
+        if(cam){ try{ pr.encodings[0].scaleResolutionDownBy=1; }catch(e){} }
         pr.encodings[0].active=!c._paused;
         try{ pr.encodings[0].priority="high"; pr.encodings[0].networkPriority="high"; }catch(e){}
-        pr.degradationPreference = q.mode==="game" ? "maintain-framerate" : (q.mode==="text" ? "maintain-resolution" : "balanced");
+        pr.degradationPreference = cam ? "maintain-framerate" : q.mode==="game" ? "maintain-framerate" : (q.mode==="text" ? "maintain-resolution" : "balanced");
         sn.setParameters(pr).catch(function(){});
       }catch(e){}
     });
@@ -1285,7 +1292,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     renderAll();
     stopping=false;
   }
-  var VERSION = "2026.10.30-r", dbgLog = [], dbgOn = false;
+  var VERSION = "2026.10.31-b", dbgLog = [], dbgOn = false;
   function dbg(t){ dbgLog.push(new Date().toLocaleTimeString()+" "+t); if(dbgLog.length>60) dbgLog.shift(); }
   window.addEventListener("error",function(e){ dbg("ERRO: "+e.message); });
   window.addEventListener("unhandledrejection",function(e){ dbg("PROMESSA: "+(e.reason&&e.reason.message||e.reason)); });
@@ -1471,6 +1478,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var c=peer.call(id,ex.stream,{sdpTransform:hostSdp,metadata:{slot:ex.slot,music:!!ex.music}});
     if(!c) return;
     c._slot=ex.slot; calls.push(c);
+    if(ex.cam) setTimeout(function(){ calls.filter(function(x){ return x._slot===7; }).forEach(tuneCall); },2500);
     var pc0=c.peerConnection;
     if(pc0) pc0.addEventListener("iceconnectionstatechange",function(){
       var st=pc0.iceConnectionState; if(st==="connected"||st==="completed") tuneCall(c);
@@ -1655,7 +1663,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     if(!active) return setMsg("Crie uma sala (Transmitir ou Criar sala) ou entre em uma antes de compartilhar a câmera.",true);
     if(camEx) return;
     if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)) return setMsg("Este navegador não permite usar a câmera. Abra o site em https:// no Chrome, Edge, Firefox ou Safari.",true);
-    var vc={facingMode:"user",width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:60,max:60}}, ns=null, withMic=true;
+    var vc={facingMode:"user",width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:30}}, ns=null, withMic=true;
     try{
       ns=await navigator.mediaDevices.getUserMedia({video:vc,audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
     }catch(e1){
@@ -1668,7 +1676,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var t=getTile("me~7","Você · câmera"); t.video.srcObject=ns; t.video.muted=true; t.video.style.transform="scaleX(-1)";
     Object.keys(members).forEach(function(id){ callExtra(id,ex); });
     var vt=ns.getVideoTracks()[0];
-    if(vt) vt.addEventListener("ended",function(){ removeExtra(ex,"A câmera foi desligada."); });
+    if(vt){ try{ vt.contentHint="motion"; }catch(e){} vt.addEventListener("ended",function(){ removeExtra(ex,"A câmera foi desligada."); }); }
     sfx("share"); renderAll();
     setMsg(withMic?"Câmera ligada. O seu microfone também vai para a sala. Clique em \"Parar câmera\" para desligar.":"Câmera ligada (sem microfone). Clique em \"Parar câmera\" para desligar.");
   }
@@ -1924,23 +1932,8 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     return cand;
   }
   function hostLeft(){
-    migrating=true; dbg("host saiu; localizando novo host");
-    var snap=snapshotCands();
-    if(snap.length===1&&!stream) setMsg("O host saiu. Esperando ele voltar…");
-    (function probe(){
-      if(!active||!migrating||isCreator) return;
-      var c, ok=false;
-      try{ c=peer.connect(creatorId); }catch(e){ return electHost(snap); }
-      c.on("open",function(){
-        ok=true; try{ c.close(); }catch(e){}
-        if(active&&migrating){ dbg("o host voltou; entrando de novo"); join(roomCode,{keepStream:true,retry:4}); }
-      });
-      setTimeout(function(){
-        if(ok||!active||!migrating) return;
-        try{ c.close(); }catch(e){}
-        electHost(snap);
-      },800);
-    })();
+    migrating=true; dbg("host saiu; elegendo outro host na hora");
+    electHost(snapshotCands());
   }
   function promote(code){
     var keep=stream, cm=camMode; stream=null; stopAll(); stream=keep; camMode=keep?cm:false;
@@ -1952,10 +1945,9 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
     var code=roomCode, rank=0;
     snap.forEach(function(c,i){ if(c.id===myId) rank=i; });
     dbg("eleição: sou o nº "+(rank+1)+" da fila ("+snap.length+" candidatos)");
-    if(snap.length===1&&!stream) return end("","O host saiu e a sala foi encerrada.");
     if(rank===0) return promote(code);
     setMsg("O host saiu. "+nameOf(snap[0].id)+" vai assumir a sala…");
-    if(active&&migrating) join(code,{keepStream:true,retry:4+rank*4});
+    setTimeout(function(){ if(active&&migrating) join(code,{keepStream:true,retry:4+rank*4}); },1500);
   }
   function onGone(conn){
     if(!active||stopping) return;
@@ -2768,7 +2760,7 @@ h1{margin:16px 0 10px;font-size:22px;letter-spacing:-.01em}
   if(location.hash.length>1){
     var hc=location.hash.slice(1); $("codeIn").value=hc.toUpperCase();
     var sv=null; try{ sv=JSON.parse(sessionStorage.getItem("telaja_room")||"null"); }catch(e){}
-    var go=function(){ if(sv && sv.role==="host" && sv.code===hc.toUpperCase() && Date.now()-sv.at<6*3600*1000) rehost(sv.code); else join(hc); };
+    var go=function(){ join(hc); };
     if(nick) go();
     else { pendingJoin=go; }
   }
